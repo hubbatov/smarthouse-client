@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/Forms/LoginForm.qml</file>
+        <file>qml/Controls/TextInput.qml</file>
+        <file>qml/Controls/LabelBold.qml</file>
+        <file>qml/Controls/Button.qml</file>
+        <file>qml/Forms/MainForm.qml</file>
+        <file>qml/Forms/RegisterForm.qml</file>
+        <file>qml/REST/RESTProvider.qml</file>
+        <file>qml/Application.qml</file>
+        <file>qml/qmldir</file>
+    </qresource>
+</RCC>
