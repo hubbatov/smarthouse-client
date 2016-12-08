@@ -61,7 +61,7 @@ ColumnLayout {
 				"password": __passwordInput.text
 			}
 
-			Global.Application.usersProvider.create(userdata, undefined, processRegisterReply)
+			Global.Application.usersProvider.create("users", userdata, undefined, processRegisterReply)
 		}
 	}
 

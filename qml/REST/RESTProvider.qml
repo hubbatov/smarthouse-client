@@ -6,13 +6,13 @@ Item {
 	property string path
 	property string idField: "id"
 
-	function list(params, callback) {
-		__p.sendRequest("GET", __p.makeRequest(path, undefined, params), undefined, callback)
+	function list(suffix, params, callback) {
+		__p.sendRequest("GET", __p.makeRequest(path, suffix, undefined, params), undefined, callback)
 	}
 
-	function get(id, params, callback) {
+	function get(suffix, id, params, callback) {
 		if(__p.idPresent(id)) {
-			__p.sendRequest("GET", __p.makeRequest(path, id, params), undefined, callback)
+			__p.sendRequest("GET", __p.makeRequest(path, suffix, id, params), undefined, callback)
 		}
 		else {
 			callback(undefined, qsTr("Invalid ") + idField)
@@ -20,25 +20,25 @@ Item {
 	}
 
 	function login(value, params, callback){
-		__p.sendRequest("POST", __p.makeRequest(path + "/login", undefined, params), value, callback)
+		__p.sendRequest("POST", __p.makeRequest(path + "/login", undefined, undefined, params), value, callback)
 	}
 
-	function create(value, params, callback) {
-		__p.sendRequest("POST", __p.makeRequest(path, undefined, params), value, callback)
+	function create(suffix, value, params, callback) {
+		__p.sendRequest("POST", __p.makeRequest(path, suffix, undefined, params), value, callback)
 	}
 
-	function update(id, newValue, params, callback) {
+	function update(suffix, id, newValue, params, callback) {
 		if(__p.idPresent(id)) {
-			__p.sendRequest("PUT", __p.makeRequest(path, id, params), newValue, callback)
+			__p.sendRequest("PUT", __p.makeRequest(path, suffix, id, params), newValue, callback)
 		}
 		else {
 			callback(undefined, qsTr("Invalid ") + idField)
 		}
 	}
 
-	function del(id, params, callback) {
+	function del(suffix, id, params, callback) {
 		if(__p.idPresent(id)) {
-			__p.sendRequest("DELETE", __p.makeRequest(path, id, params), undefined, callback)
+			__p.sendRequest("DELETE", __p.makeRequest(path, suffix, id, params), undefined, callback)
 		}
 		else {
 			callback(undefined, qsTr("Invalid ") + idField)
@@ -51,6 +51,7 @@ Item {
 			var request = new XMLHttpRequest()
 			request.open(type, path, true)
 			request.onreadystatechange = function () {
+				console.log(JSON.stringify(request))
 				if (request.readyState === XMLHttpRequest.DONE) {
 					var res = {}
 					if(successStatus(request.status)) {
@@ -75,8 +76,13 @@ Item {
 				request.send()
 			}
 		}
-		function makeRequest(path, id, params) {
+		function makeRequest(path, suffix, id, params) {
 			var ret = path
+
+			if(typeof suffix === "string" && suffix.length > 0){
+				ret += ("/" + suffix)
+			}
+
 			if(typeof id === "string" && id.length > 0) {
 				ret += ("/" + id)
 			}
