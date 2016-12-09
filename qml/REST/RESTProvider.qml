@@ -77,8 +77,8 @@ Item {
 				}
 			}
 
-			request.setRequestHeader("Authorization", accessToken)
-			console.log(accessToken)
+			if(!!accessToken)
+				request.setRequestHeader("Authorization", "Basic " + accessToken)
 
 			if(!!value) {
 				var arg = (typeof value !== "string") ? JSON.stringify(value) : value
