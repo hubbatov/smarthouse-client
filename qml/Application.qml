@@ -8,7 +8,7 @@ QtObject{
 
 	property string servicePath: "http://localhost:12345"
 
-	property var usersProvider: REST.RESTProvider {
+	property var restProvider: REST.RESTProvider {
 		path: servicePath
 	}
 }

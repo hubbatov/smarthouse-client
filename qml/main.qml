@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 
 import "Forms" as Forms
+import "." as Global
 
 Window {
 	visible: true

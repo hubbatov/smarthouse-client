@@ -61,7 +61,7 @@ ColumnLayout {
 				"password": __passwordInput.text
 			}
 
-			Global.Application.usersProvider.create("users", userdata, undefined, processRegisterReply)
+			Global.Application.restProvider.create("users", userdata, undefined, processRegisterReply)
 		}
 	}
 
@@ -82,7 +82,7 @@ ColumnLayout {
 	}
 
 	function processRegisterReply(reply, error){
-		console.log(JSON.stringify(reply))
+		console.log("register reply: ", JSON.stringify(reply))
 
 		if("error" in reply){
 

@@ -2,7 +2,7 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.1
 
 import "../Controls" as Controls
-
+import ".." as Global
 
 ColumnLayout {
 
@@ -19,6 +19,7 @@ ColumnLayout {
 
 		onClicked: {
 			console.log("logout...")
+			Global.Application.restProvider.logout()
 			logout()
 		}
 	}
@@ -26,5 +27,4 @@ ColumnLayout {
 	Item {
 		Layout.fillHeight: true
 	}
-
 }

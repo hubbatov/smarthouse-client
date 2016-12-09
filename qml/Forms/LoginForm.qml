@@ -42,7 +42,7 @@ ColumnLayout {
 				"password": __passwordInput.text
 			}
 
-			Global.Application.usersProvider.login(userdata, undefined, processLoginReply)
+			Global.Application.restProvider.login(userdata, undefined, processLoginReply)
 		}
 	}
 
@@ -62,12 +62,14 @@ ColumnLayout {
 
 
 	function processLoginReply(reply, error){
-		console.log(JSON.stringify(reply))
-
+		console.log("login reply: ", JSON.stringify(reply))
 		if("error" in reply){
-
 		}else{
 			loggedIn()
+
+			Global.Application.restProvider.list("users", undefined, function processReply(ret){
+				console.log(JSON.stringify(ret))
+			})
 		}
 		clearFields()
 	}
@@ -75,4 +77,4 @@ ColumnLayout {
 	function clearFields(){
 		__passwordInput.text = ""
 	}
-	}
+}

@@ -23,6 +23,11 @@ Item {
 		__p.sendRequest("POST", __p.makeRequest(path + "/login", undefined, undefined, params), value, callback)
 	}
 
+	function logout(){
+		__p.login = ""
+		__p.password = ""
+	}
+
 	function create(suffix, value, params, callback) {
 		__p.sendRequest("POST", __p.makeRequest(path, suffix, undefined, params), value, callback)
 	}
@@ -47,16 +52,22 @@ Item {
 
 	QtObject {
 		id: __p
+
+		property string login: ""
+		property string password: ""
+		property string accessToken: (login && password) ? Qt.btoa(login + ":" + password) : ""
+
 		function sendRequest(type, path, value, callback) {
 			var request = new XMLHttpRequest()
 			request.open(type, path, true)
 			request.onreadystatechange = function () {
-				console.log(JSON.stringify(request))
 				if (request.readyState === XMLHttpRequest.DONE) {
 					var res = {}
 					if(successStatus(request.status)) {
 						res["answer"] = request.responseText
 					}else if(authorizedStatus(request.status)){
+						login = value.login
+						password = value.password
 						res["answer"] = request.responseText
 					}else {
 						res["error"] = request.statusText
@@ -65,6 +76,9 @@ Item {
 					callback(res)
 				}
 			}
+
+			request.setRequestHeader("Authorization", accessToken)
+			console.log(accessToken)
 
 			if(!!value) {
 				var arg = (typeof value !== "string") ? JSON.stringify(value) : value
