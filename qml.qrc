@@ -10,5 +10,10 @@
         <file>qml/REST/RESTProvider.qml</file>
         <file>qml/Application.qml</file>
         <file>qml/qmldir</file>
+        <file>qml/Forms/HousesForm.qml</file>
+        <file>qml/Delegates/HouseDelegate.qml</file>
+        <file>qml/ApplicationStyle.qml</file>
+        <file>qml/Forms/HeaderForm.qml</file>
+        <file>qml/Delegates/SensorDelegate.qml</file>
     </qresource>
 </RCC>

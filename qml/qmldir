@@ -1,1 +1,2 @@
 singleton Application 1.0 Application.qml
+singleton ApplicationStyle 1.0 ApplicationStyle.qml

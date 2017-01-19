@@ -1,80 +1,95 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.1
+import Qt.labs.settings 1.0
 
 import "../Controls" as Controls
 import ".." as Global
 
-ColumnLayout {
-	spacing: 10
+Item{
+    implicitHeight: __loginFormLayout.implicitHeight
 
-	signal loggedIn()
-	signal needRegister()
+    signal loggedIn()
+    signal needRegister()
 
-	Controls.LabelBold {
-		text: qsTr("Username")
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+    ColumnLayout {
+        id: __loginFormLayout
+        spacing: 10
+        anchors.fill: parent
 
-	Controls.TextInput {
-		id: __loginInput
-	}
+        Settings {
+            id: __settings
+            property alias login: __loginInput.text
+        }
 
-	Controls.LabelBold {
-		text: qsTr("Password")
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+        Item {
+            Layout.fillHeight: true
+        }
 
-	Controls.TextInput {
-		id: __passwordInput
-		echoMode: TextInput.Password
-	}
+        Controls.LabelBold {
+            text: qsTr("Username")
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
-	Controls.Button {
-		text: qsTr("Login")
+        Controls.TextInput {
+            id: __loginInput
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
-		enabled: __loginInput.text && __passwordInput.text
+        Controls.LabelBold {
+            text: qsTr("Password")
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
-		onClicked: {
-			console.log("login...")
+        Controls.TextInput {
+            id: __passwordInput
+            echoMode: TextInput.Password
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
-			var userdata = {
-				"login": __loginInput.text,
-				"password": __passwordInput.text
-			}
+        Controls.Button {
+            text: qsTr("Login")
 
-			Global.Application.restProvider.login(userdata, undefined, processLoginReply)
-		}
-	}
+            enabled: __loginInput.text && __passwordInput.text
+            anchors.horizontalCenter: parent.horizontalCenter
 
-	Controls.Button {
-		text: qsTr("Register")
+            onClicked: {
+                console.log("login...")
 
-		onClicked: {
-			console.log("register request...")
-			needRegister()
-			clearFields()
-		}
-	}
+                var userdata = {
+                    "login": __loginInput.text,
+                    "password": __passwordInput.text
+                }
 
-	Item {
-		Layout.fillHeight: true
-	}
+                Global.Application.restProvider.login(userdata, undefined, processLoginReply)
+            }
+        }
 
+        Controls.Button {
+            text: qsTr("Register")
+            anchors.horizontalCenter: parent.horizontalCenter
 
-	function processLoginReply(reply, error){
-		console.log("login reply: ", JSON.stringify(reply))
-		if("error" in reply){
-		}else{
-			loggedIn()
+            onClicked: {
+                console.log("register request...")
+                needRegister()
+                clearFields()
+            }
+        }
 
-			Global.Application.restProvider.list("users", undefined, function processReply(ret){
-				console.log(JSON.stringify(ret))
-			})
-		}
-		clearFields()
-	}
+        Item {
+            Layout.fillHeight: true
+        }
+    }
 
-	function clearFields(){
-		__passwordInput.text = ""
-	}
+    function processLoginReply(reply, error){
+        console.log("login reply: ", JSON.stringify(reply))
+        if("error" in reply){
+        }else{
+            loggedIn()
+        }
+        clearFields()
+    }
+
+    function clearFields(){
+        __passwordInput.text = ""
+    }
 }

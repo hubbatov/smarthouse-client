@@ -1,11 +1,13 @@
 import QtQuick 2.6
 
+import ".." as Global
+
 Rectangle{
 	id: __button
 
-	width: 300
-	height: 30
-	radius: 5
+    width: Global.ApplicationStyle.style().control_width
+    height: Global.ApplicationStyle.style().control_height
+    radius: 5
 
 	color: enabled ? "#CFCD59" : "#CFCFCF"
 	border.color: "#919191"
@@ -19,7 +21,7 @@ Rectangle{
 		anchors.centerIn: parent
 
 		font.bold: true
-		font.pixelSize: 14
+        font.pixelSize: Global.ApplicationStyle.style().font_pixel_size
 	}
 
 	MouseArea {

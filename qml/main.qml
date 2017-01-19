@@ -1,61 +1,89 @@
 import QtQuick 2.6
-import QtQuick.Window 2.2
+import Qt.labs.controls 1.0
 
 import "Forms" as Forms
 import "." as Global
 
-Window {
-	visible: true
-	width: 480
-	height: 720
+ApplicationWindow {
+    id: __window
 
-	minimumHeight: 480
-	minimumWidth: 360
+    visible: true
 
-	title: qsTr("Anybody here?")
+    width: 720
+    height: 600
 
-	color: "#5EBCDC"
+    title: qsTr("Anybody here?")
 
-	Item {
-		anchors.fill: parent
+    color: "#5EBCDC"
 
-		Forms.LoginForm {
-			id: __loginForm
-			visible: true
-			anchors.centerIn: parent
+    header: Forms.HeaderForm {
+        width: __window.width
+        visible: __mainForm.visible
 
-			onLoggedIn: {
-				__loginForm.visible = false
-				__mainForm.visible = true
-			}
+        onLogout: {
+            __mainForm.visible = false
+            __loginForm.visible = true
+        }
+    }
 
-			onNeedRegister: {
-				__loginForm.visible = false
-				__registerForm.visible = true
-			}
-		}
+    Flickable {
 
-		Forms.RegisterForm {
-			id: __registerForm
-			visible: false
-			anchors.centerIn: parent
+        contentWidth: __content.cntWidth()
+        contentHeight: __content.cntHeigth()
 
-			onCanLogin: {
-				__registerForm.visible = false
-				__loginForm.visible = true
-			}
-		}
+        anchors.fill: parent
 
-		Forms.MainForm {
-			id: __mainForm
-			visible: false
-			anchors.centerIn: parent
+        Item {
+            id: __content
 
-			onLogout: {
-				__mainForm.visible = false
-				__loginForm.visible = true
-			}
-		}
-	}
+            width: __content.cntWidth()
+            height: __content.cntHeigth()
 
+            Forms.LoginForm {
+                id: __loginForm
+                visible: true
+                anchors.fill: parent
+
+                onLoggedIn: {
+                    __loginForm.visible = false
+                    __mainForm.visible = true
+
+                    __mainForm.showHouses()
+                }
+
+                onNeedRegister: {
+                    __loginForm.visible = false
+                    __registerForm.visible = true
+                }
+            }
+
+            Forms.RegisterForm {
+                id: __registerForm
+                visible: false
+                anchors.fill: parent
+
+                onCanLogin: {
+                    __registerForm.visible = false
+                    __loginForm.visible = true
+                }
+            }
+
+            Forms.MainForm {
+                id: __mainForm
+                visible: false
+                anchors.fill: parent
+            }
+
+            function cntWidth(){
+                return __window.width
+            }
+
+            function cntHeigth(){
+                if(__loginForm.visible) return __loginForm.height
+                if(__registerForm.visible) return __registerForm.height
+                if(__mainForm.visible) return __mainForm.height
+                return 0
+            }
+        }
+    }
 }

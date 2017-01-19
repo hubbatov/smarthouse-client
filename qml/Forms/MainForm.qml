@@ -4,27 +4,24 @@ import QtQuick.Layouts 1.1
 import "../Controls" as Controls
 import ".." as Global
 
-ColumnLayout {
+Item {
+    implicitHeight: __layout.implicitHeight
 
-	spacing: 10
+    ColumnLayout {
+        id: __layout
 
-	signal logout()
+        spacing: 10
+        anchors.fill: parent
 
-	Controls.LabelBold {
-		text: qsTr("Welcome %1").arg("${user}")
-	}
+        HousesForm {
+            id: __housesForm
 
-	Controls.Button {
-		text: qsTr("Logout")
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+        }
+    }
 
-		onClicked: {
-			console.log("logout...")
-			Global.Application.restProvider.logout()
-			logout()
-		}
-	}
-
-	Item {
-		Layout.fillHeight: true
-	}
+    function showHouses(){
+        __housesForm.updateModel()
+    }
 }
