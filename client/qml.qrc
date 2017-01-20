@@ -15,5 +15,8 @@
         <file>qml/ApplicationStyle.qml</file>
         <file>qml/Forms/HeaderForm.qml</file>
         <file>qml/Delegates/SensorDelegate.qml</file>
+        <file>qml/Controls/RoundPercents.qml</file>
+        <file>qml/Graphs/NumericChart.qml</file>
+        <file>qml/test.qml</file>
     </qresource>
 </RCC>

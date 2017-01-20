@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS = client tests
+SUBDIRS = client

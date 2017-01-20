@@ -2,8 +2,8 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
 
-import "./Graphs" as Graphs
-import "./Controls" as Controls
+import "Graphs" as Graphs
+import "Controls" as Controls
 
 Window {
 	visible: true
@@ -48,10 +48,6 @@ Window {
 						__graph.addValue(Date.now().toString(), value)
 					}
 				}
-			}
-
-			ControlsExternal.TextInput{
-				width: 200
 			}
 		}
 	}
