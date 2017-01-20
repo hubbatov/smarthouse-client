@@ -10,40 +10,46 @@ Rectangle {
 	property var house: null
 
 	radius: 4
-	color: "transparent"
-	border.color: "black"
+	color: Global.ApplicationStyle.background
 
-	implicitHeight: __houseDelegateLayout.implicitHeight
-	implicitWidth: Global.ApplicationStyle.screenSize.width - 20
+	height: __houseLabel.height + __sensorsView.height + 40
+
+	ListModel {
+		id: __sensorsModel
+	}
 
 	ColumnLayout {
-		id: __houseDelegateLayout
 
-		spacing: 5
-		anchors.fill: parent
-		anchors.margins: 10
+		spacing: 10
 
-		implicitHeight: 40 * __sensorsModel.count + 40
+		anchors.top: __delegate.top; anchors.topMargin: 10
+		anchors.left: __delegate.left; anchors.leftMargin: 10
+		anchors.right: __delegate.right; anchors.rightMargin: 10
 
 		Controls.LabelBold {
+			id: __houseLabel
 			text: !!house.name ? qsTr("%1").arg(house.name) : ""
 		}
 
 		ListView {
 			id: __sensorsView
 
+			clip: true
+			width: __delegate.width - 20
+
 			model: __sensorsModel
 
-			Layout.fillHeight: true
+			spacing: 10
 
 			delegate: SensorDelegate{
+				width: parent.width
 				sensor: __sensorsModel.get(index)
+
+				Component.onCompleted: {
+					__sensorsView.height += height
+				}
 			}
 		}
-	}
-
-	ListModel {
-		id: __sensorsModel
 	}
 
 	function updateModel(){

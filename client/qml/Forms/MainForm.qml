@@ -5,20 +5,10 @@ import "../Controls" as Controls
 import ".." as Global
 
 Item {
-	implicitHeight: __layout.implicitHeight
+	HousesForm {
+		id: __housesForm
 
-	ColumnLayout {
-		id: __layout
-
-		spacing: 10
 		anchors.fill: parent
-
-		HousesForm {
-			id: __housesForm
-
-			Layout.fillHeight: true
-			Layout.fillWidth: true
-		}
 	}
 
 	function showHouses(){

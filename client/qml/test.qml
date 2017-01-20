@@ -2,7 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
 
-import "Graphs" as Graphs
+import "Views" as Views
 import "Controls" as Controls
 
 Window {
@@ -24,7 +24,7 @@ Window {
 
 			anchors.fill: parent
 
-			Controls.RoundPercents {
+			Views.RoundPercents {
 				id: __percents
 
 				Timer {
@@ -39,7 +39,7 @@ Window {
 				}
 			}
 
-			Graphs.NumericChart {
+			Views.NumericChart {
 				id: __graph
 
 				Component.onCompleted: {
@@ -48,6 +48,10 @@ Window {
 						__graph.addValue(Date.now().toString(), value)
 					}
 				}
+			}
+
+			Controls.AddButton{
+
 			}
 		}
 	}

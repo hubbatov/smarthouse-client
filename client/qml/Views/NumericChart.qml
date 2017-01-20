@@ -1,4 +1,5 @@
 import QtQuick 2.5
+import ".." as Global
 
 Item{
 	id: __chart
@@ -6,8 +7,9 @@ Item{
 	implicitWidth: 400
 	implicitHeight: 200
 
-	property color background: "#7A7A7A"
-	property color foreground: "#FFB845"
+	property color background: Global.ApplicationStyle.background
+	property color foreground: Global.ApplicationStyle.foreground
+
 	readonly property alias chartData: __data
 
 	ListModel { id: __data }
@@ -96,14 +98,16 @@ Item{
 					ctx.lineTo((i + 1) * xStep, nextValue * yStep)
 				}
 
-				ctx.closePath();
+				ctx.closePath()
 				ctx.stroke()
 
-				ctx.beginPath();
-				ctx.fillStyle = foreground
-				ctx.arc(__private.hoveredValue.x, __private.hoveredValue.y, __private.hoveredPointRadius, 0, Math.PI*2, true);
-				ctx.closePath();
-				ctx.fill();
+				if(__private.hoveredValue != Qt.point(-1, -1)){
+					ctx.beginPath()
+					ctx.fillStyle = foreground
+					ctx.arc(__private.hoveredValue.x, __private.hoveredValue.y, __private.hoveredPointRadius, 0, Math.PI*2, true)
+					ctx.closePath()
+					ctx.fill()
+				}
 
 			}
 
@@ -112,6 +116,9 @@ Item{
 				hoverEnabled: true
 
 				onPositionChanged: {
+					if(__data.count == 0){
+						return
+					}
 
 					var index = ((mouseX / width) * __data.count) | 0
 

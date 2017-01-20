@@ -7,11 +7,15 @@ Item {
 	property string idField: "id"
 
 	function currentUserId(){
-		return __p.userId
+		if(__p.user)
+			return __p.user.id
+		return 0
 	}
 
 	function currentUserName(){
-		return __p.userName
+		if(__p.user)
+			return __p.user.name
+		return ""
 	}
 
 	function list(suffix, params, callback) {
@@ -31,12 +35,13 @@ Item {
 		__p.login = value.login
 		__p.password = value.password
 		__p.sendRequest("POST", __p.makeRequest(path + "/login", undefined, undefined, params), value, callback)
+		getUserData()
 	}
 
 	function logout(){
 		__p.login = ""
 		__p.password = ""
-		__p.userId = ""
+		__p.user = null
 	}
 
 	function create(suffix, value, params, callback) {
@@ -61,14 +66,23 @@ Item {
 		}
 	}
 
+	function getUserData(){
+		list("user", undefined, fillUserData)
+	}
+
+	function fillUserData(response){
+		if("answer" in response){
+			__p.user = JSON.parse(response.answer)
+		}
+	}
+
 	QtObject {
 		id: __p
 
+		property var user: null
 
-		property string userId: ""
 		property string login: ""
 		property string password: ""
-		property string userName: "not implemented"
 
 		property string accessToken: (login && password) ? Qt.btoa(login + ":" + password) : ""
 
@@ -82,6 +96,7 @@ Item {
 						res["answer"] = request.responseText
 					}else if(authorizedStatus(request.status)){
 						res["answer"] = request.responseText
+						getUserData()
 					}else {
 						res["error"] = request.statusText
 						res["errorText"] = request.responseText

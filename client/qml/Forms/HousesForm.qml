@@ -6,37 +6,31 @@ import "../Delegates" as Delegates
 import ".." as Global
 
 Item{
-	implicitHeight: __housesFormLayout.implicitHeight
-	implicitWidth: __housesFormLayout.implicitWidth
-
-	ColumnLayout {
-		id: __housesFormLayout
-
-		spacing: 10
-		anchors.fill: parent
-		anchors.margins: 10
-
-		ListView {
-			id: __housesView
-
-			model: __housesModel
-
-			delegate: Delegates.HouseDelegate {
-				house: __housesModel.get(index)
-
-				Component.onCompleted: {
-					updateModel()
-				}
-			}
-		}
-
-		Item {
-			Layout.fillHeight: true
-		}
-	}
 
 	ListModel {
 		id: __housesModel
+	}
+
+	ListView {
+		anchors.fill: parent
+
+		model: __housesModel
+
+		delegate: Delegates.HouseDelegate {
+
+			house: __housesModel.get(index)
+			width: parent.width
+
+			Component.onCompleted: {
+				updateModel()
+			}
+		}
+	}
+
+	Controls.AddButton {
+		anchors.right: parent.right; anchors.rightMargin: 5
+		anchors.bottom: parent.bottom; anchors.bottomMargin: 5
+
 	}
 
 	function updateModel(){

@@ -12,9 +12,9 @@ ApplicationWindow {
 	width: 720
 	height: 600
 
-	title: qsTr("Anybody here?")
+	title: qsTr("Smarthouse")
 
-	color: "#5EBCDC"
+	color: Global.ApplicationStyle.background
 
 	header: Forms.HeaderForm {
 		width: __window.width
@@ -26,64 +26,46 @@ ApplicationWindow {
 		}
 	}
 
-	Flickable {
 
-		contentWidth: __content.cntWidth()
-		contentHeight: __content.cntHeigth()
+
+	Item {
+		id: __content
 
 		anchors.fill: parent
 
-		Item {
-			id: __content
+		Forms.LoginForm {
+			id: __loginForm
+			visible: true
+			anchors.fill: parent
 
-			width: __content.cntWidth()
-			height: __content.cntHeigth()
+			onLoggedIn: {
+				__loginForm.visible = false
+				__mainForm.visible = true
 
-			Forms.LoginForm {
-				id: __loginForm
-				visible: true
-				anchors.fill: parent
-
-				onLoggedIn: {
-					__loginForm.visible = false
-					__mainForm.visible = true
-
-					__mainForm.showHouses()
-				}
-
-				onNeedRegister: {
-					__loginForm.visible = false
-					__registerForm.visible = true
-				}
+				__mainForm.showHouses()
 			}
 
-			Forms.RegisterForm {
-				id: __registerForm
-				visible: false
-				anchors.fill: parent
-
-				onCanLogin: {
-					__registerForm.visible = false
-					__loginForm.visible = true
-				}
+			onNeedRegister: {
+				__loginForm.visible = false
+				__registerForm.visible = true
 			}
+		}
 
-			Forms.MainForm {
-				id: __mainForm
-				visible: false
-				anchors.fill: parent
-			}
+		Forms.RegisterForm {
+			id: __registerForm
+			visible: false
+			anchors.fill: parent
 
-			function cntWidth(){
-				return __window.width
+			onCanLogin: {
+				__registerForm.visible = false
+				__loginForm.visible = true
 			}
+		}
 
-			function cntHeigth(){
-				if(__loginForm.visible) return __loginForm.height
-				if(__registerForm.visible) return __registerForm.height
-				if(__mainForm.visible) return __mainForm.height
-				return 0
-			}
+		Forms.MainForm {
+			id: __mainForm
+			visible: false
+			anchors.fill: parent
 		}
 	}
 }

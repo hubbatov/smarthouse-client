@@ -1,10 +1,11 @@
 import QtQuick 2.5
+import ".." as Global
 
 Item{
 	id: __control
 
-	property color background: "#7A7A7A"
-	property color foreground: "#FFB845"
+	property color background: Global.ApplicationStyle.background
+	property color foreground: Global.ApplicationStyle.foreground
 
 	property int value: 0
 

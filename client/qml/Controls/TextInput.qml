@@ -11,6 +11,8 @@ Rectangle{
 	height: Global.ApplicationStyle.style().control_height
 	radius: 5
 
+	border.color: Global.ApplicationStyle.border
+
 	TextInput {
 		id: __input
 		font.bold: true

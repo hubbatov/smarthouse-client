@@ -9,8 +9,8 @@ Rectangle{
 	height: Global.ApplicationStyle.style().control_height
 	radius: 5
 
-	color: enabled ? "#CFCD59" : "#CFCFCF"
-	border.color: "#919191"
+	color: enabled ? Global.ApplicationStyle.button : Global.ApplicationStyle.buttonDisabled
+	border.color: Global.ApplicationStyle.border
 
 	property alias text: __label.text
 	signal clicked()
@@ -22,6 +22,8 @@ Rectangle{
 
 		font.bold: true
 		font.pixelSize: Global.ApplicationStyle.style().font_pixel_size
+
+		color: Global.ApplicationStyle.foreground
 	}
 
 	MouseArea {

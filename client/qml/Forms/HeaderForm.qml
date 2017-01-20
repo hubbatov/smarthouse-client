@@ -5,7 +5,7 @@ import "../Controls" as Controls
 import ".." as Global
 
 Rectangle{
-	color: "#4b7380"
+	color: Global.ApplicationStyle.backgroundHeader
 	height: 50
 
 	signal logout()
