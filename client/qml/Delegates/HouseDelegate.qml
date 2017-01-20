@@ -12,7 +12,7 @@ Rectangle {
 	radius: 4
 	color: Global.ApplicationStyle.background
 
-	height: __houseLabel.height + __sensorsView.height + 40
+    height: __houseLabel.height + __houseDescriptionLabel.height + __sensorsView.height + 40
 
 	ListModel {
 		id: __sensorsModel
@@ -28,8 +28,15 @@ Rectangle {
 
 		Controls.LabelBold {
 			id: __houseLabel
-			text: !!house.name ? qsTr("%1").arg(house.name) : ""
+            text: !!house ? qsTr("%1").arg(house.name) : ""
 		}
+
+        Controls.LabelBold {
+            id: __houseDescriptionLabel
+            font.bold: false
+            font.pixelSize: 12
+            text: !!house ? qsTr("%1").arg(house.address) : ""
+        }
 
 		ListView {
 			id: __sensorsView
@@ -43,6 +50,7 @@ Rectangle {
 
 			delegate: SensorDelegate{
 				width: parent.width
+                house: __delegate.house
 				sensor: __sensorsModel.get(index)
 
 				Component.onCompleted: {

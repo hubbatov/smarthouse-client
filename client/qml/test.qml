@@ -32,7 +32,7 @@ Window {
 					repeat: true
 					running: true
 					onTriggered: {
-						var value = Math.abs(Math.random()) * 100
+                        var value = Math.abs(Math.random()) * 100 - 50
 						parent.value = value
 						__graph.addValue(Date.now().toString(), value)
 					}

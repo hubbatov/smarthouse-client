@@ -6,7 +6,7 @@ import "REST" as REST
 
 QtObject{
 
-	property string servicePath: "http://localhost:12345"
+    property string servicePath: "http://localhost:12345"
 
 	property var restProvider: REST.RESTProvider {
 		path: servicePath
