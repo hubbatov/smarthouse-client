@@ -5,5 +5,5 @@ import ".." as Global
 
 Label {
 	font.bold: true
-    font.pixelSize: Global.ApplicationStyle.style().font_pixel_size
+	font.pixelSize: Global.ApplicationStyle.style().font_pixel_size
 }

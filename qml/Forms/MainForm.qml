@@ -5,23 +5,23 @@ import "../Controls" as Controls
 import ".." as Global
 
 Item {
-    implicitHeight: __layout.implicitHeight
+	implicitHeight: __layout.implicitHeight
 
-    ColumnLayout {
-        id: __layout
+	ColumnLayout {
+		id: __layout
 
-        spacing: 10
-        anchors.fill: parent
+		spacing: 10
+		anchors.fill: parent
 
-        HousesForm {
-            id: __housesForm
+		HousesForm {
+			id: __housesForm
 
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-        }
-    }
+			Layout.fillHeight: true
+			Layout.fillWidth: true
+		}
+	}
 
-    function showHouses(){
-        __housesForm.updateModel()
-    }
+	function showHouses(){
+		__housesForm.updateModel()
+	}
 }

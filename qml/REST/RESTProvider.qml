@@ -6,13 +6,13 @@ Item {
 	property string path
 	property string idField: "id"
 
-    function currentUserId(){
-        return __p.userId
-    }
+	function currentUserId(){
+		return __p.userId
+	}
 
-    function currentUserName(){
-        return __p.userName
-    }
+	function currentUserName(){
+		return __p.userName
+	}
 
 	function list(suffix, params, callback) {
 		__p.sendRequest("GET", __p.makeRequest(path, suffix, undefined, params), undefined, callback)
@@ -28,13 +28,15 @@ Item {
 	}
 
 	function login(value, params, callback){
+		__p.login = value.login
+		__p.password = value.password
 		__p.sendRequest("POST", __p.makeRequest(path + "/login", undefined, undefined, params), value, callback)
 	}
 
 	function logout(){
 		__p.login = ""
 		__p.password = ""
-        __p.userId = ""
+		__p.userId = ""
 	}
 
 	function create(suffix, value, params, callback) {
@@ -63,10 +65,10 @@ Item {
 		id: __p
 
 
-        property string userId: ""
-        property string login: ""
-        property string password: ""
-        property string userName: "not implemented"
+		property string userId: ""
+		property string login: ""
+		property string password: ""
+		property string userName: "not implemented"
 
 		property string accessToken: (login && password) ? Qt.btoa(login + ":" + password) : ""
 
@@ -79,13 +81,6 @@ Item {
 					if(successStatus(request.status)) {
 						res["answer"] = request.responseText
 					}else if(authorizedStatus(request.status)){
-                        var userObj = JSON.parse(request.responseText)
-
-                        login = userObj.login
-                        password = userObj.password
-                        userId = userObj.id
-                        userName = userObj.name
-
 						res["answer"] = request.responseText
 					}else {
 						res["error"] = request.statusText
