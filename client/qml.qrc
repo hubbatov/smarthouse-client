@@ -31,5 +31,6 @@
         <file>qml/Forms/Dialogs/Forms/HouseAddForm.qml</file>
         <file>qml/Forms/Dialogs/Forms/HouseEditForm.qml</file>
         <file>qml/Forms/Dialogs/Forms/HouseRemoveForm.qml</file>
+        <file>qml/Controls/FunctionalButtons/FunctionalButton.qml</file>
     </qresource>
 </RCC>

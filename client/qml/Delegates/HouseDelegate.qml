@@ -13,7 +13,7 @@ Rectangle {
 	radius: 4
 	color: Global.ApplicationStyle.background
 
-	height: __houseLabel.height + __houseDescriptionLabel.height + __sensorsView.height + 50
+	height: __layout.implicitHeight
 
 	signal editRequest(var houseToEdit)
 	signal removeRequest(var houseToRemove)
@@ -40,6 +40,7 @@ Rectangle {
 	}
 
 	ColumnLayout {
+		id: __layout
 
 		spacing: 10
 
@@ -67,24 +68,20 @@ Rectangle {
 			visible: __sensorsModel.count === 0
 		}
 
-		ListView {
+		Repeater {
 			id: __sensorsView
 
 			clip: true
-			width: __delegate.width - 20
 
-			model: __sensorsModel
-
-			spacing: 10
+			model: __sensorsModel.count
 
 			delegate: SensorDelegate{
-				width: __delegate.width
+				implicitHeight: height
+
+				Layout.fillWidth: true
+
 				house: __delegate.house
 				sensor: __sensorsModel.get(index)
-
-				Component.onCompleted: {
-					__sensorsView.height += height
-				}
 			}
 		}
 	}
@@ -105,9 +102,9 @@ Rectangle {
 		if("answer" in response){
 			var sensors = JSON.parse(response.answer)
 			if(sensors.length){
-				for( var i = 0; i < sensors.length; ++i){
-					__sensorsModel.append(sensors[i])
-				}
+				sensors.forEach(function(sensor, i, sensors){
+					__sensorsModel.append(sensor)
+				})
 			}
 		}
 	}

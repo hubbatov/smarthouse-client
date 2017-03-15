@@ -14,8 +14,7 @@ Rectangle {
 	radius: 4
 	color: Global.ApplicationStyle.background
 
-	height: __mainLayout.height + 30
-	width: 200
+	height: __mainLayout.implicitHeight + 30
 
 	ListModel{
 		id: __sensorDataModel
@@ -36,24 +35,35 @@ Rectangle {
 
 		RowLayout {
 			id: __dataLayout
+
+			Layout.fillWidth: true
+
 			spacing: 10
+
+			property int lastDataSize: 50
 
 			Views.RoundPercents {
 				id: __percents
-				Layout.minimumHeight: 80
-				Layout.minimumWidth: 80
+				Layout.minimumHeight: __dataLayout.lastDataSize
+				Layout.minimumWidth: __dataLayout.lastDataSize
+				Layout.maximumHeight: __dataLayout.lastDataSize
+				Layout.maximumWidth: __dataLayout.lastDataSize
 				visible: false
 			}
 
 			Views.Temperature {
 				id: __temperature
-				Layout.minimumHeight: 80
-				Layout.minimumWidth: 80
+				Layout.minimumHeight: __dataLayout.lastDataSize
+				Layout.minimumWidth: __dataLayout.lastDataSize
+				Layout.maximumHeight: __dataLayout.lastDataSize
+				Layout.maximumWidth: __dataLayout.lastDataSize
 			}
 
 			Views.NumericChart {
 				id: __chart
-				Layout.minimumHeight: 80
+				Layout.minimumHeight: __dataLayout.lastDataSize
+				Layout.maximumHeight: __dataLayout.lastDataSize
+
 				Layout.fillWidth: true
 			}
 		}
@@ -70,14 +80,16 @@ Rectangle {
 		if("answer" in response){
 			var sensorDatas = JSON.parse(response.answer)
 			if(sensorDatas.length){
-				for( var i = 0; i < sensorDatas.length; ++i){
+				if(!__sensorDataModel) return
+
+				sensorDatas.forEach(function(sensorData, i, sensorDatas){
 					__sensorDataModel.append(sensorDatas[i])
 
 					var data = JSON.parse(sensorDatas[i].data)
 
 					__chart.addValue(sensorDatas[i].time, data.temperature)
 					__temperature.value = data.temperature
-				}
+				})
 			}
 		}
 	}

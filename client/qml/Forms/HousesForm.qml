@@ -1,5 +1,6 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.1
+import QtGraphicalEffects 1.0
 
 import "Dialogs" as Dialogs
 
@@ -16,6 +17,8 @@ Item{
 
 	ListView {
 		id: __housesList
+
+		spacing: 10
 
 		anchors.fill: parent
 
@@ -41,6 +44,21 @@ Item{
 			Component.onCompleted: {
 				updateModel()
 			}
+		}
+	}
+
+	LinearGradient {
+		anchors.bottom: parent.bottom
+		anchors.left: parent.left
+		anchors.right: parent.right
+
+		height: 80
+
+		start: Qt.point(0, 0)
+		end: Qt.point(0, height)
+		gradient: Gradient {
+			GradientStop { position: 0.0; color: "transparent" }
+			GradientStop { position: 1.0; color: Global.ApplicationStyle.background }
 		}
 	}
 
@@ -95,7 +113,7 @@ Item{
 
 		onItemChanged: {
 			if(!!item)
-			item.house = __housesList.lastSelectedHouse
+				item.house = __housesList.lastSelectedHouse
 		}
 	}
 
@@ -122,11 +140,13 @@ Item{
 	function fillModel(response){
 		console.log("get houses reply: ", JSON.stringify(response))
 		if("answer" in response){
+			if(!__housesModel) return
+
 			var houses = JSON.parse(response.answer)
 			if(houses.length){
-				for( var i = 0; i < houses.length; ++i){
+				houses.forEach(function(house, i, houses){
 					__housesModel.append(houses[i])
-				}
+				})
 			}
 		}
 	}

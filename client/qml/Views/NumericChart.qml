@@ -4,8 +4,8 @@ import ".." as Global
 Item{
 	id: __chart
 
-	implicitWidth: 400
-	implicitHeight: 200
+	width: 400
+	height: 200
 
 	property color background: Global.ApplicationStyle.background
 	property color foreground: Global.ApplicationStyle.foreground
@@ -181,5 +181,9 @@ Item{
 				}
 			}
 		}
+	}
+
+	Component.onCompleted: {
+		__chartCanvas.requestPaint()
 	}
 }
