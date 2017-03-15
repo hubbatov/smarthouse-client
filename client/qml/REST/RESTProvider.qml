@@ -18,6 +18,18 @@ Item {
 		return ""
 	}
 
+	function currentUserLogin(){
+		if(__p.user)
+			return __p.user.login
+		return ""
+	}
+
+	function currentUserPassword(){
+		if(__p.user)
+			return __p.user.password
+		return ""
+	}
+
 	function list(suffix, params, callback) {
 		__p.sendRequest("GET", __p.makeRequest(path, suffix, undefined, params), undefined, callback)
 	}
@@ -137,6 +149,7 @@ Item {
 			else {
 				ret += ""
 			}
+			console.log(ret)
 			return ret
 		}
 		function successStatus(status) {

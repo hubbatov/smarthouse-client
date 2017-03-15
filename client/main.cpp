@@ -17,6 +17,10 @@ int main(int argc, char *argv[])
 
 	parser.process(app);
 
+	app.setOrganizationName("hubbatov");
+	app.setOrganizationDomain("hubbatov.com");
+	app.setApplicationName("smarthouse-client");
+
 	if(parser.isSet(testingOption))
 		engine.load(QUrl(QStringLiteral("qrc:/qml/test.qml")));
 	else

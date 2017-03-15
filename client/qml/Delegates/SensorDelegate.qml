@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.1
 
 import "../Controls" as Controls
+import "../Controls/FunctionalButtons" as Buttons
 import "../Views" as Views
 import ".." as Global
 
@@ -16,6 +17,9 @@ Rectangle {
 
 	height: __mainLayout.implicitHeight + 30
 
+	signal editRequest(var house, var sensor)
+	signal removeRequest(var house, var sensor)
+
 	ListModel{
 		id: __sensorDataModel
 	}
@@ -28,13 +32,34 @@ Rectangle {
 		anchors.left: __delegate.left; anchors.leftMargin: 10
 		anchors.right: __delegate.right; anchors.rightMargin: 10
 
-		Controls.LabelBold {
-			id: __sensorLabel
-			text: !!sensor ? qsTr("%1").arg(sensor.name) : ""
+		RowLayout{
+			Layout.fillWidth: true
+
+			Controls.LabelBold {
+				id: __sensorLabel
+				text: !!sensor ? qsTr("%1").arg(sensor.name) : ""
+			}
+
+			Item{
+				Layout.fillWidth: true
+			}
+
+			Buttons.EditButton {
+				onClicked: {
+					editRequest(house, sensor)
+				}
+			}
+
+			Buttons.RemoveButton {
+				onClicked: {
+					removeRequest(house, sensor)
+				}
+			}
 		}
 
 		RowLayout {
 			id: __dataLayout
+			visible: __sensorDataModel.count > 0
 
 			Layout.fillWidth: true
 
@@ -66,6 +91,15 @@ Rectangle {
 
 				Layout.fillWidth: true
 			}
+		}
+
+		Controls.LabelBold {
+			font.bold: false
+			font.italic: true
+
+			visible: __sensorDataModel.count === 0
+
+			text: qsTr("No data available")
 		}
 	}
 

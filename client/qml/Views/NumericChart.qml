@@ -142,6 +142,7 @@ Item{
 					ctx.fill()
 
 					var index = ((__private.hoveredValue.x / width) * __data.count) | 0
+					if(index >= __data.count) return
 					var data = __data.get(index)
 					ctx.fillText(data.label, __private.hoveredValue.x, height)
 				}
@@ -159,6 +160,8 @@ Item{
 					var cY = __chartCanvas.centerY()
 
 					var index = ((mouseX / width) * __data.count) | 0
+
+					if(index >= __data.count) return
 
 					var value = __data.get(index).value
 					if(__private.minimum > 0){

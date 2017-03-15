@@ -7,6 +7,7 @@ import "../../.." as Global
 ColumnLayout {
 
 	property var house: null
+	property var sensor: null
 
 	anchors.fill: parent
 
@@ -19,13 +20,13 @@ ColumnLayout {
 	}
 
 	Controls.LabelBold {
-		text: qsTr("Remove house")
+		text: qsTr("Remove sensor")
 		color: Global.ApplicationStyle.foreground
 		anchors.horizontalCenter: parent.horizontalCenter
 	}
 
 	Controls.LabelBold {
-		text: (!!house ? house.name : "undefined") + " " + qsTr("will be removed. Are you sure?")
+		text: (!!sensor ? sensor.name : "undefined") + " " + qsTr("will be removed. Are you sure?")
 
 		wrapMode: Text.WordWrap
 
@@ -34,16 +35,17 @@ ColumnLayout {
 	}
 
 	Controls.Button {
-		text: qsTr("Remove house")
+		text: qsTr("Remove sensor")
 
 		anchors.horizontalCenter: parent.horizontalCenter
 
 		onClicked: {
 
-			var houseEditRequestString = "users/" + Global.Application.restProvider.currentUserId()
-			houseEditRequestString += "/houses"
+			var sensorRemoveRequestString = "users/" + Global.Application.restProvider.currentUserId()
+			sensorRemoveRequestString += "/houses/" + house.id
+			sensorRemoveRequestString += "/sensors"
 
-			Global.Application.restProvider.del(houseEditRequestString,  house.id, undefined, houseRemoved)
+			Global.Application.restProvider.del(sensorRemoveRequestString, sensor.id, undefined, sensorRemoved)
 		}
 	}
 
@@ -51,7 +53,7 @@ ColumnLayout {
 		Layout.fillHeight: true
 	}
 
-	function houseRemoved(){
+	function sensorRemoved(){
 		removed()
 	}
 }

@@ -19,6 +19,13 @@ Item{
 		Settings {
 			id: __settings
 			property alias login: __loginInput.text
+			property alias password: __passwordInput.text
+
+			Component.onCompleted: {
+				if(login && password){
+					tryLogin()
+				}
+			}
 		}
 
 		Item {
@@ -55,14 +62,7 @@ Item{
 			anchors.horizontalCenter: parent.horizontalCenter
 
 			onClicked: {
-				console.log("login...")
-
-				var userdata = {
-					"login": __loginInput.text,
-					"password": __passwordInput.text
-				}
-
-				Global.Application.restProvider.login(userdata, undefined, processLoginReply)
+				tryLogin()
 			}
 		}
 
@@ -82,6 +82,17 @@ Item{
 		}
 	}
 
+	function tryLogin(){
+		console.log("login...")
+
+		var userdata = {
+			"login": __loginInput.text,
+			"password": __passwordInput.text
+		}
+
+		Global.Application.restProvider.login(userdata, undefined, processLoginReply)
+	}
+
 	function processLoginReply(reply, error){
 		if("error" in reply){
 		}else{
@@ -92,5 +103,10 @@ Item{
 
 	function clearFields(){
 		__passwordInput.text = ""
+	}
+
+	Component.onDestruction: {
+		__settings.login = Global.Application.restProvider.currentUserLogin()
+		__settings.password = Global.Application.restProvider.currentUserPassword()
 	}
 }

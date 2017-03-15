@@ -32,5 +32,9 @@
         <file>qml/Forms/Dialogs/Forms/HouseEditForm.qml</file>
         <file>qml/Forms/Dialogs/Forms/HouseRemoveForm.qml</file>
         <file>qml/Controls/FunctionalButtons/FunctionalButton.qml</file>
+        <file>qml/Forms/Dialogs/SensorDialog.qml</file>
+        <file>qml/Forms/Dialogs/Forms/SensorAddForm.qml</file>
+        <file>qml/Forms/Dialogs/Forms/SensorEditForm.qml</file>
+        <file>qml/Forms/Dialogs/Forms/SensorRemoveForm.qml</file>
     </qresource>
 </RCC>

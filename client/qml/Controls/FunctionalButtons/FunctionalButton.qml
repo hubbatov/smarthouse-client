@@ -6,13 +6,16 @@ import "../.." as Global
 Item {
 	id: __button
 
-	width: 40
-	height: 40
+	width: iconSize
+	height: iconSize
 
-	property int padding: 20
+	property int iconSize: 20
+
+	property bool withShadow: false
 
 	property string icon
 	property color color: "black"
+	property color shadowColor: "black"
 
 	signal clicked()
 
@@ -22,9 +25,7 @@ Item {
 		visible: false
 		smooth: true
 
-		width: sourceSize.width
-		height: sourceSize.height
-		sourceSize: Qt.size(__button.width - padding, __button.height - padding)
+		sourceSize: Qt.size(iconSize, iconSize)
 
 		anchors.centerIn: parent
 	}
@@ -44,8 +45,9 @@ Item {
 		verticalOffset: __mouseArea.pressed ? 0 : 1
 		radius: 3.0
 		samples: 17
-		color: __button.color
+		color: __button.shadowColor
 		source: __overlay
+		visible: __button.withShadow
 	}
 
 	MouseArea{

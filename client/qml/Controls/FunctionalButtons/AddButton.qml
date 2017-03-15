@@ -4,8 +4,8 @@ import QtGraphicalEffects 1.0
 import "../.." as Global
 
 FunctionalButton {
-	color: "#80000000"
-	padding: 0
-
+	iconSize: 40
 	icon: "qrc:/icons/add.png"
+
+	color: "#52CC33"
 }

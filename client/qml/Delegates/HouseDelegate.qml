@@ -1,6 +1,8 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.1
 
+import "../Forms/Dialogs" as Dialogs
+
 import "../Controls" as Controls
 import "../Controls/FunctionalButtons" as Buttons
 import ".." as Global
@@ -15,8 +17,12 @@ Rectangle {
 
 	height: __layout.implicitHeight
 
-	signal editRequest(var houseToEdit)
-	signal removeRequest(var houseToRemove)
+	signal editRequest(var house)
+	signal removeRequest(var house)
+
+	signal addSensorRequest(var house)
+	signal editSensorRequest(var house, var sensor)
+	signal removeSensorRequest(var house, var sensor)
 
 	ListModel {
 		id: __sensorsModel
@@ -25,6 +31,15 @@ Rectangle {
 	RowLayout{
 		anchors.top: __delegate.top; anchors.topMargin: 5
 		anchors.right: __delegate.right; anchors.rightMargin: 5
+
+		Buttons.AddButton{
+			iconSize: 20
+			color: "#787878"
+
+			onClicked: {
+				addSensorRequest(house)
+			}
+		}
 
 		Buttons.EditButton {
 			onClicked: {
@@ -75,6 +90,8 @@ Rectangle {
 
 			model: __sensorsModel.count
 
+			property var lastSelectedSensor: null
+
 			delegate: SensorDelegate{
 				implicitHeight: height
 
@@ -82,6 +99,14 @@ Rectangle {
 
 				house: __delegate.house
 				sensor: __sensorsModel.get(index)
+
+				onEditRequest: {
+					editSensorRequest(house, sensor)
+				}
+
+				onRemoveRequest: {
+					removeSensorRequest(house, sensor)
+				}
 			}
 		}
 	}

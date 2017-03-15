@@ -21,10 +21,23 @@ Item{
 		spacing: 10
 
 		anchors.fill: parent
+		anchors.bottomMargin: __footer.height
 
 		model: __housesModel
 
+		enabled: needEnable()
+
+		function needEnable(){
+			return !__houseDialogAddLoader.active
+					&& !__houseDialogEditLoader.active
+					&& !__houseDialogRemoveLoader.active
+					&& !__sensorDialogAddLoader.active
+					&& !__sensorDialogEditLoader.active
+					&& !__sensorDialogRemoveLoader.active
+		}
+
 		property var lastSelectedHouse: null
+		property var lastSelectedSensor: null
 
 		delegate: Delegates.HouseDelegate {
 
@@ -32,13 +45,30 @@ Item{
 			width: parent.width
 
 			onEditRequest: {
-				__housesList.lastSelectedHouse = houseToEdit
+				__housesList.lastSelectedHouse = house
 				__houseDialogEditLoader.active = true
 			}
 
 			onRemoveRequest: {
-				__housesList.lastSelectedHouse = houseToRemove
+				__housesList.lastSelectedHouse = house
 				__houseDialogRemoveLoader.active = true
+			}
+
+			onAddSensorRequest: {
+				__housesList.lastSelectedHouse = house
+				__sensorDialogAddLoader.active = true
+			}
+
+			onEditSensorRequest: {
+				__housesList.lastSelectedHouse = house
+				__housesList.lastSelectedSensor = sensor
+				__sensorDialogEditLoader.active = true
+			}
+
+			onRemoveSensorRequest: {
+				__housesList.lastSelectedHouse = house
+				__housesList.lastSelectedSensor = sensor
+				__sensorDialogRemoveLoader.active = true
 			}
 
 			Component.onCompleted: {
@@ -48,6 +78,8 @@ Item{
 	}
 
 	LinearGradient {
+		id: __footer
+
 		anchors.bottom: parent.bottom
 		anchors.left: parent.left
 		anchors.right: parent.right
@@ -58,6 +90,7 @@ Item{
 		end: Qt.point(0, height)
 		gradient: Gradient {
 			GradientStop { position: 0.0; color: "transparent" }
+			GradientStop { position: 0.3; color: Global.ApplicationStyle.background }
 			GradientStop { position: 1.0; color: Global.ApplicationStyle.background }
 		}
 	}
@@ -126,6 +159,74 @@ Item{
 		onItemChanged: {
 			if(!!item)
 				item.house = __housesList.lastSelectedHouse
+		}
+	}
+
+	Component {
+		id: __sensorDialogAddComponent
+		Dialogs.SensorDialog {
+			mode: mADD_MODE
+			onClose: __sensorDialogAddLoader.active = false
+			onNeedUpdateSensors: updateModel()
+		}
+	}
+
+	Component {
+		id: __sensorDialogEditComponent
+		Dialogs.SensorDialog {
+			mode: mEDIT_MODE
+			onClose: __sensorDialogEditLoader.active = false
+			onNeedUpdateSensors: updateModel()
+		}
+	}
+
+	Component {
+		id: __sensorDialogRemoveComponent
+		Dialogs.SensorDialog {
+			mode: mREMOVE_MODE
+			onClose: __sensorDialogRemoveLoader.active = false
+			onNeedUpdateSensors: updateModel()
+		}
+	}
+
+	Loader {
+		id: __sensorDialogAddLoader
+		sourceComponent: __sensorDialogAddComponent
+		active: false
+		anchors.fill: parent
+
+		onItemChanged: {
+			if(!!item){
+				item.house = __housesList.lastSelectedHouse
+			}
+		}
+	}
+
+	Loader {
+		id: __sensorDialogEditLoader
+		sourceComponent: __sensorDialogEditComponent
+		active: false
+		anchors.fill: parent
+
+		onItemChanged: {
+			if(!!item){
+				item.house = __housesList.lastSelectedHouse
+				item.sensor = __housesList.lastSelectedSensor
+			}
+		}
+	}
+
+	Loader {
+		id: __sensorDialogRemoveLoader
+		sourceComponent: __sensorDialogRemoveComponent
+		active: false
+		anchors.fill: parent
+
+		onItemChanged: {
+			if(!!item){
+				item.house = __housesList.lastSelectedHouse
+				item.sensor = __housesList.lastSelectedSensor
+			}
 		}
 	}
 
