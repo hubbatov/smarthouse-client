@@ -32,16 +32,16 @@ Window {
 					repeat: true
 					running: true
 					onTriggered: {
-                        var value = Math.abs(Math.random()) * 100 - 50
+						var value = Math.abs(Math.random()) * 100 - 50
 						parent.value = value
 						__graph.addValue(Date.now().toString(), value)
+						__graph.toEnd()
 					}
 				}
 			}
 
 			Views.NumericChart {
 				id: __graph
-
 				Component.onCompleted: {
 					for(var i = 0; i < 100; ++i){
 						var value = Math.abs(Math.random()) * 100

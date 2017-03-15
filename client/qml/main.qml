@@ -26,8 +26,6 @@ ApplicationWindow {
 		}
 	}
 
-
-
 	Item {
 		id: __content
 

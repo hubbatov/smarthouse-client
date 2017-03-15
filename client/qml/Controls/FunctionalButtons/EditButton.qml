@@ -1,16 +1,19 @@
 import QtQuick 2.6
 import QtGraphicalEffects 1.0
 
-import ".." as Global
+import "../.."  as Global
 
 Item {
+	id: __button
 
-	width: 40
-	height: 40
+	width: 20
+	height: 20
+
+	signal clicked()
 
 	Image{
 		id: __image
-		source: "qrc:/icons/add.png"
+		source: "qrc:/icons/edit.png"
 		visible: false
 		smooth: true
 		anchors.centerIn: parent
@@ -19,7 +22,7 @@ Item {
 	ColorOverlay {
 		id: __overlay
 		cached: true
-		color: Global.ApplicationStyle.button
+		color: Global.ApplicationStyle.foreground
 		source: __image
 		anchors.fill: __image
 		visible: true
@@ -37,6 +40,11 @@ Item {
 
 	MouseArea{
 		id: __mouseArea
+
+		onClicked: {
+			__button.clicked()
+		}
+
 		anchors.fill: __image
 	}
 }

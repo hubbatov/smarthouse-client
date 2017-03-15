@@ -47,6 +47,8 @@ Item{
 		}
 
 		Controls.Button {
+			id: __loginButton
+
 			text: qsTr("Login")
 
 			enabled: __loginInput.text && __passwordInput.text

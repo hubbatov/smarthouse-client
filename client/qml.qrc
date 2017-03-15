@@ -18,8 +18,18 @@
         <file>qml/test.qml</file>
         <file>qml/Views/NumericChart.qml</file>
         <file>qml/Views/RoundPercents.qml</file>
-        <file>qml/Controls/AddButton.qml</file>
         <file>icons/add.png</file>
         <file>qml/Views/Temperature.qml</file>
+        <file>icons/close.png</file>
+        <file>qml/Controls/FunctionalButtons/AddButton.qml</file>
+        <file>qml/Controls/FunctionalButtons/CloseButton.qml</file>
+        <file>qml/Controls/FunctionalButtons/EditButton.qml</file>
+        <file>qml/Controls/FunctionalButtons/RemoveButton.qml</file>
+        <file>icons/edit.png</file>
+        <file>icons/remove.png</file>
+        <file>qml/Forms/Dialogs/HouseDialog.qml</file>
+        <file>qml/Forms/Dialogs/Forms/HouseAddForm.qml</file>
+        <file>qml/Forms/Dialogs/Forms/HouseEditForm.qml</file>
+        <file>qml/Forms/Dialogs/Forms/HouseRemoveForm.qml</file>
     </qresource>
 </RCC>
