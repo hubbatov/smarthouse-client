@@ -36,5 +36,10 @@
         <file>qml/Forms/Dialogs/Forms/SensorAddForm.qml</file>
         <file>qml/Forms/Dialogs/Forms/SensorEditForm.qml</file>
         <file>qml/Forms/Dialogs/Forms/SensorRemoveForm.qml</file>
+        <file>qml/Delegates/CommandDelegate.qml</file>
+        <file>qml/Forms/Dialogs/CommandDialog.qml</file>
+        <file>qml/Forms/Dialogs/Forms/CommandAddForm.qml</file>
+        <file>qml/Forms/Dialogs/Forms/CommandEditForm.qml</file>
+        <file>qml/Forms/Dialogs/Forms/CommandRemoveForm.qml</file>
     </qresource>
 </RCC>

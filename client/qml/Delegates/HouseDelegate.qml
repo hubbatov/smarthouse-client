@@ -24,13 +24,30 @@ Rectangle {
 	signal editSensorRequest(var house, var sensor)
 	signal removeSensorRequest(var house, var sensor)
 
+	signal addCommandRequest(var house)
+	signal editCommandRequest(var house, var command)
+	signal removeCommandRequest(var house, var command)
+
 	ListModel {
 		id: __sensorsModel
+	}
+
+	ListModel {
+		id: __commandsModel
 	}
 
 	RowLayout{
 		anchors.top: __delegate.top; anchors.topMargin: 5
 		anchors.right: __delegate.right; anchors.rightMargin: 5
+
+		Buttons.AddButton{
+			iconSize: 20
+			color: "#787878"
+
+			onClicked: {
+				addCommandRequest(house)
+			}
+		}
 
 		Buttons.AddButton{
 			iconSize: 20
@@ -65,14 +82,14 @@ Rectangle {
 
 		Controls.LabelBold {
 			id: __houseLabel
-			text: !!house ? qsTr("%1").arg(house.name) : ""
+			text: !!house ? house.name : ""
 		}
 
 		Controls.LabelBold {
 			id: __houseDescriptionLabel
 			font.bold: false
 			font.pixelSize: 12
-			text: !!house ? qsTr("%1").arg(house.address) : ""
+			text: !!house ? house.address : ""
 		}
 
 		Controls.LabelBold {
@@ -80,17 +97,40 @@ Rectangle {
 			font.bold: false
 			font.italic: true
 			text: qsTr("No sensors available")
-			visible: __sensorsModel.count === 0
+			visible: __sensorsModel.count === 0 && __commandsView.count
+		}
+
+		Repeater {
+			id: __commandsView
+
+			model: __commandsModel.count
+
+			delegate: CommandDelegate{
+				implicitHeight: height
+
+				Layout.fillWidth: true
+
+				house: __delegate.house
+				command: __commandsModel.get(index)
+
+				onEditRequest: {
+					editCommandRequest(house, command)
+				}
+
+				onRemoveRequest: {
+					removeCommandRequest(house, command)
+				}
+
+				Component.onCompleted: {
+					updateControls()
+				}
+			}
 		}
 
 		Repeater {
 			id: __sensorsView
 
-			clip: true
-
 			model: __sensorsModel.count
-
-			property var lastSelectedSensor: null
 
 			delegate: SensorDelegate{
 				implicitHeight: height
@@ -111,7 +151,29 @@ Rectangle {
 		}
 	}
 
-	function updateModel(){
+	function updateCommandsModel(){
+		__sensorsModel.clear()
+
+		if(!house) return
+
+		var sensorsRequestString = "users/" + Global.Application.restProvider.currentUserId()
+		sensorsRequestString += "/houses/" + house.id
+		sensorsRequestString += "/commands"
+		Global.Application.restProvider.list(sensorsRequestString, undefined, fillCommandsModel)
+	}
+
+	function fillCommandsModel(response){
+		if("answer" in response){
+			var commands = JSON.parse(response.answer)
+			if(commands.length){
+				commands.forEach(function(command, i, commands){
+					__commandsModel.append(command)
+				})
+			}
+		}
+	}
+
+	function updateSensorsModel(){
 		__sensorsModel.clear()
 
 		if(!house) return
@@ -119,10 +181,10 @@ Rectangle {
 		var sensorsRequestString = "users/" + Global.Application.restProvider.currentUserId()
 		sensorsRequestString += "/houses/" + house.id
 		sensorsRequestString += "/sensors"
-		Global.Application.restProvider.list(sensorsRequestString, undefined, fillModel)
+		Global.Application.restProvider.list(sensorsRequestString, undefined, fillSensorsModel)
 	}
 
-	function fillModel(response){
+	function fillSensorsModel(response){
 		if("answer" in response){
 			var sensors = JSON.parse(response.answer)
 			if(sensors.length){

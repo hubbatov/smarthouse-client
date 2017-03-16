@@ -31,6 +31,9 @@ Item{
 			return !__houseDialogAddLoader.active
 					&& !__houseDialogEditLoader.active
 					&& !__houseDialogRemoveLoader.active
+					&& !__commandDialogAddLoader.active
+					&& !__commandDialogEditLoader.active
+					&& !__commandDialogRemoveLoader.active
 					&& !__sensorDialogAddLoader.active
 					&& !__sensorDialogEditLoader.active
 					&& !__sensorDialogRemoveLoader.active
@@ -38,6 +41,7 @@ Item{
 
 		property var lastSelectedHouse: null
 		property var lastSelectedSensor: null
+		property var lastSelectedCommand: null
 
 		delegate: Delegates.HouseDelegate {
 
@@ -52,6 +56,23 @@ Item{
 			onRemoveRequest: {
 				__housesList.lastSelectedHouse = house
 				__houseDialogRemoveLoader.active = true
+			}
+
+			onAddCommandRequest: {
+				__housesList.lastSelectedHouse = house
+				__commandDialogAddLoader.active = true
+			}
+
+			onEditCommandRequest: {
+				__housesList.lastSelectedHouse = house
+				__housesList.lastSelectedCommand = command
+				__commandDialogEditLoader.active = true
+			}
+
+			onRemoveCommandRequest: {
+				__housesList.lastSelectedHouse = house
+				__housesList.lastSelectedCommand = command
+				__commandDialogRemoveLoader.active = true
 			}
 
 			onAddSensorRequest: {
@@ -72,7 +93,8 @@ Item{
 			}
 
 			Component.onCompleted: {
-				updateModel()
+				updateCommandsModel()
+				updateSensorsModel()
 			}
 		}
 	}
@@ -104,30 +126,86 @@ Item{
 		}
 	}
 
-	Component {
-		id: __houseDialogAddComponent
-		Dialogs.HouseDialog {
-			mode: mADD_MODE
-			onClose: __houseDialogAddLoader.active = false
-			onNeedUpdateHouses: updateModel()
+	Item {
+		Component {
+			id: __houseDialogAddComponent
+			Dialogs.HouseDialog {
+				mode: mADD_MODE
+				onClose: __houseDialogAddLoader.active = false
+				onNeedUpdateHouses: updateModel()
+			}
 		}
-	}
 
-	Component {
-		id: __houseDialogEditComponent
-		Dialogs.HouseDialog {
-			mode: mEDIT_MODE
-			onClose: __houseDialogEditLoader.active = false
-			onNeedUpdateHouses: updateModel()
+		Component {
+			id: __houseDialogEditComponent
+			Dialogs.HouseDialog {
+				mode: mEDIT_MODE
+				onClose: __houseDialogEditLoader.active = false
+				onNeedUpdateHouses: updateModel()
+			}
 		}
-	}
 
-	Component {
-		id: __houseDialogRemoveComponent
-		Dialogs.HouseDialog {
-			mode: mREMOVE_MODE
-			onClose: __houseDialogRemoveLoader.active = false
-			onNeedUpdateHouses: updateModel()
+		Component {
+			id: __houseDialogRemoveComponent
+			Dialogs.HouseDialog {
+				mode: mREMOVE_MODE
+				onClose: __houseDialogRemoveLoader.active = false
+				onNeedUpdateHouses: updateModel()
+			}
+		}
+
+		Component {
+			id: __commandDialogAddComponent
+			Dialogs.CommandDialog {
+				mode: mADD_MODE
+				onClose: __commandDialogAddLoader.active = false
+				onNeedUpdateCommands: updateModel()
+			}
+		}
+
+		Component {
+			id: __commandDialogEditComponent
+			Dialogs.CommandDialog {
+				mode: mEDIT_MODE
+				onClose: __commandDialogEditLoader.active = false
+				onNeedUpdateCommands: updateModel()
+			}
+		}
+
+		Component {
+			id: __commandDialogRemoveComponent
+			Dialogs.CommandDialog {
+				mode: mREMOVE_MODE
+				onClose: __commandDialogRemoveLoader.active = false
+				onNeedUpdateCommands: updateModel()
+			}
+		}
+
+		Component {
+			id: __sensorDialogAddComponent
+			Dialogs.SensorDialog {
+				mode: mADD_MODE
+				onClose: __sensorDialogAddLoader.active = false
+				onNeedUpdateSensors: updateModel()
+			}
+		}
+
+		Component {
+			id: __sensorDialogEditComponent
+			Dialogs.SensorDialog {
+				mode: mEDIT_MODE
+				onClose: __sensorDialogEditLoader.active = false
+				onNeedUpdateSensors: updateModel()
+			}
+		}
+
+		Component {
+			id: __sensorDialogRemoveComponent
+			Dialogs.SensorDialog {
+				mode: mREMOVE_MODE
+				onClose: __sensorDialogRemoveLoader.active = false
+				onNeedUpdateSensors: updateModel()
+			}
 		}
 	}
 
@@ -162,30 +240,44 @@ Item{
 		}
 	}
 
-	Component {
-		id: __sensorDialogAddComponent
-		Dialogs.SensorDialog {
-			mode: mADD_MODE
-			onClose: __sensorDialogAddLoader.active = false
-			onNeedUpdateSensors: updateModel()
+	Loader {
+		id: __commandDialogAddLoader
+		sourceComponent: __commandDialogAddComponent
+		active: false
+		anchors.fill: parent
+
+		onItemChanged: {
+			if(!!item){
+				item.house = __housesList.lastSelectedHouse
+			}
 		}
 	}
 
-	Component {
-		id: __sensorDialogEditComponent
-		Dialogs.SensorDialog {
-			mode: mEDIT_MODE
-			onClose: __sensorDialogEditLoader.active = false
-			onNeedUpdateSensors: updateModel()
+	Loader {
+		id: __commandDialogEditLoader
+		sourceComponent: __commandDialogEditComponent
+		active: false
+		anchors.fill: parent
+
+		onItemChanged: {
+			if(!!item){
+				item.house = __housesList.lastSelectedHouse
+				item.command = __housesList.lastSelectedCommand
+			}
 		}
 	}
 
-	Component {
-		id: __sensorDialogRemoveComponent
-		Dialogs.SensorDialog {
-			mode: mREMOVE_MODE
-			onClose: __sensorDialogRemoveLoader.active = false
-			onNeedUpdateSensors: updateModel()
+	Loader {
+		id: __commandDialogRemoveLoader
+		sourceComponent: __commandDialogRemoveComponent
+		active: false
+		anchors.fill: parent
+
+		onItemChanged: {
+			if(!!item){
+				item.house = __housesList.lastSelectedHouse
+				item.command = __housesList.lastSelectedCommand
+			}
 		}
 	}
 

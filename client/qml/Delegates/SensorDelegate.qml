@@ -37,7 +37,7 @@ Rectangle {
 
 			Controls.LabelBold {
 				id: __sensorLabel
-				text: !!sensor ? qsTr("%1").arg(sensor.name) : ""
+				text: !!sensor ? sensor.name : ""
 			}
 
 			Item{
