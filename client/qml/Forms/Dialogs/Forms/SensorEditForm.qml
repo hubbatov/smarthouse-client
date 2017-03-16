@@ -37,10 +37,22 @@ ColumnLayout {
 		anchors.horizontalCenter: parent.horizontalCenter
 	}
 
+	Controls.LabelBold {
+		text: qsTr("Tag")
+		color: Global.ApplicationStyle.foreground
+		anchors.horizontalCenter: parent.horizontalCenter
+	}
+
+	Controls.TextInput {
+		id: __editTagInput
+		text: !!sensor ? sensor.tag : ""
+		anchors.horizontalCenter: parent.horizontalCenter
+	}
+
 	Controls.Button {
 		text: qsTr("Edit sensor")
 
-		enabled: __editNameInput.text
+		enabled: __editNameInput.text && __editTagInput.text
 		anchors.horizontalCenter: parent.horizontalCenter
 
 		onClicked: {
@@ -50,7 +62,8 @@ ColumnLayout {
 			sensorEditRequestString += "/sensors"
 
 			var editedSensor = {
-				"name": __editNameInput.text
+				"name": __editNameInput.text,
+				"tag": __editTagInput.text
 			}
 
 			Global.Application.restProvider.update(sensorEditRequestString,  sensor.id, JSON.stringify(editedSensor), undefined, sensorEdited)

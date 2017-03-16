@@ -35,11 +35,22 @@ ColumnLayout {
 		anchors.horizontalCenter: parent.horizontalCenter
 	}
 
+	Controls.LabelBold {
+		text: qsTr("Tag")
+		color: Global.ApplicationStyle.foreground
+		anchors.horizontalCenter: parent.horizontalCenter
+	}
+
+	Controls.TextInput {
+		id: __addTagInput
+		anchors.horizontalCenter: parent.horizontalCenter
+	}
+
 
 	Controls.Button {
 		text: qsTr("Add sensor")
 
-		enabled: __addNameInput.text
+		enabled: __addNameInput.text && __addTagInput.text
 		anchors.horizontalCenter: parent.horizontalCenter
 
 		onClicked: {
@@ -49,7 +60,8 @@ ColumnLayout {
 			sensorAddRequestString += "/sensors"
 
 			var newSensor = {
-				"name": __addNameInput.text
+				"name": __addNameInput.text,
+				"tag": __addTagInput.text
 			}
 
 			Global.Application.restProvider.create(sensorAddRequestString, JSON.stringify(newSensor), undefined, sensorAdded)

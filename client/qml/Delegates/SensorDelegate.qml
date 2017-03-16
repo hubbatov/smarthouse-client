@@ -57,6 +57,12 @@ Rectangle {
 			}
 		}
 
+		Controls.LabelBold {
+			id: __sensorTagLabel
+			font.bold: false
+			text: !!sensor ? qsTr("%1").arg(sensor.tag) : ""
+		}
+
 		RowLayout {
 			id: __dataLayout
 			visible: __sensorDataModel.count > 0
