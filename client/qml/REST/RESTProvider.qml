@@ -34,6 +34,10 @@ Item {
 		__p.sendRequest("GET", __p.makeRequest(path, suffix, undefined, params), undefined, callback)
 	}
 
+	function listWithFilter(suffix, params, callback){
+		__p.sendRequest("PUT", __p.makeRequest(path, suffix, undefined, undefined), params, callback)
+	}
+
 	function get(suffix, id, params, callback) {
 		if(__p.idPresent(id)) {
 			__p.sendRequest("GET", __p.makeRequest(path, suffix, id, params), undefined, callback)
@@ -149,7 +153,6 @@ Item {
 			else {
 				ret += ""
 			}
-			console.log(ret)
 			return ret
 		}
 		function successStatus(status) {

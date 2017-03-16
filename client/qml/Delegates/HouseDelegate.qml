@@ -123,7 +123,6 @@ Rectangle {
 	}
 
 	function fillModel(response){
-		console.log("get sensors reply: ", JSON.stringify(response))
 		if("answer" in response){
 			var sensors = JSON.parse(response.answer)
 			if(sensors.length){

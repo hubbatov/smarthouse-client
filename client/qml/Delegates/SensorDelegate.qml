@@ -109,11 +109,35 @@ Rectangle {
 		}
 	}
 
-	Component.onCompleted: {
+	Timer {
+		interval: 5000
+		repeat: true
+		running: true
+		triggeredOnStart: true
+		onTriggered: {
+			updateModel()
+		}
+	}
+
+	function updateModel() {
 		var sensorsRequestString = "users/" + Global.Application.restProvider.currentUserId()
 		sensorsRequestString += "/houses/" + house.id
 		sensorsRequestString += "/sensors/" + sensor.id + "/sensordata"
-		Global.Application.restProvider.list(sensorsRequestString, undefined, fillModel)
+
+		var dt
+		if(__sensorDataModel.count > 0){
+			dt = new Date(__sensorDataModel.get(__sensorDataModel.count - 1).time)
+			dt.setSeconds(dt.getSeconds() + 1)
+
+		}else{
+			dt = new Date(0)
+		}
+
+		var filter = {
+			"after":  dt
+		}
+
+		Global.Application.restProvider.listWithFilter(sensorsRequestString, JSON.stringify(filter), fillModel)
 	}
 
 	function fillModel(response){

@@ -239,7 +239,6 @@ Item{
 	}
 
 	function fillModel(response){
-		console.log("get houses reply: ", JSON.stringify(response))
 		if("answer" in response){
 			if(!__housesModel) return
 
