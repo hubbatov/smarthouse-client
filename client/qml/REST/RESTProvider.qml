@@ -47,6 +47,10 @@ Item {
 		}
 	}
 
+	function post(suffix, params, callback){
+		__p.sendRequest("POST", __p.makeRequest(path, suffix, undefined, undefined), params, callback)
+	}
+
 	function login(value, params, callback){
 		__p.login = value.login
 		__p.password = value.password

@@ -60,7 +60,17 @@ Rectangle {
 						anchors.fill: parent
 
 						onClicked: {
-							console.log(command.query + suffix)
+							var commandRunString = "commands/do"
+
+							var cmd = {
+								"id": __delegate.command.id,
+								"query": __delegate.command.query,
+								"suffix": suffix,
+								"type": __delegate.command.command_type,
+								"body": ""
+							}
+
+							Global.Application.restProvider.post(commandRunString, JSON.stringify(cmd), parseAnswer)
 						}
 					}
 				}
@@ -82,6 +92,10 @@ Rectangle {
 				}
 			}
 		}
+	}
+
+	function parseAnswer(ret){
+		console.log(JSON.stringify(ret))
 	}
 
 	function updateControls(){
