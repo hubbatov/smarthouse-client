@@ -30,13 +30,7 @@ Item{
 		enabled: needEnable()
 
 		function needEnable(){
-			return !__houseDialog.visible
-					&& !__commandDialogAddLoader.active
-					&& !__commandDialogEditLoader.active
-					&& !__commandDialogRemoveLoader.active
-					&& !__sensorDialogAddLoader.active
-					&& !__sensorDialogEditLoader.active
-					&& !__sensorDialogRemoveLoader.active
+			return !__houseDialog.visible && !__sensorDialog.visible && !__commandDialog.visible
 		}
 
 		property var lastSelectedHouse: null
@@ -60,36 +54,36 @@ Item{
 
 			onAddCommandRequest: {
 				__housesList.lastSelectedHouse = house
-				__commandDialogAddLoader.active = true
+				__commandDialog.enterAddMode()
 			}
 
 			onEditCommandRequest: {
 				__housesList.lastSelectedHouse = house
 				__housesList.lastSelectedCommand = command
-				__commandDialogEditLoader.active = true
+				__commandDialog.enterEditMode()
 			}
 
 			onRemoveCommandRequest: {
 				__housesList.lastSelectedHouse = house
 				__housesList.lastSelectedCommand = command
-				__commandDialogRemoveLoader.active = true
+				__commandDialog.enterRemoveMode()
 			}
 
 			onAddSensorRequest: {
 				__housesList.lastSelectedHouse = house
-				__sensorDialogAddLoader.active = true
+				__sensorDialog.enterAddMode()
 			}
 
 			onEditSensorRequest: {
 				__housesList.lastSelectedHouse = house
 				__housesList.lastSelectedSensor = sensor
-				__sensorDialogEditLoader.active = true
+				__sensorDialog.enterEditMode()
 			}
 
 			onRemoveSensorRequest: {
 				__housesList.lastSelectedHouse = house
 				__housesList.lastSelectedSensor = sensor
-				__sensorDialogRemoveLoader.active = true
+				__sensorDialog.enterRemoveMode()
 			}
 
 			Component.onCompleted: {
@@ -133,145 +127,30 @@ Item{
 
 		anchors.fill: parent
 
-		onNeedUpdateHouses: updateModel()
+		onNeedUpdate: updateModel()
 	}
 
-	Item {
-		Component {
-			id: __commandDialogAddComponent
-			Dialogs.CommandDialog {
-				mode: mADD_MODE
-				onClose: __commandDialogAddLoader.active = false
-				onNeedUpdateCommands: updateModel()
-			}
-		}
+	Dialogs.SensorDialog {
+		id: __sensorDialog
+		house:  __housesList.lastSelectedHouse
+		sensor: __housesList.lastSelectedSensor
+		visible: false
 
-		Component {
-			id: __commandDialogEditComponent
-			Dialogs.CommandDialog {
-				mode: mEDIT_MODE
-				onClose: __commandDialogEditLoader.active = false
-				onNeedUpdateCommands: updateModel()
-			}
-		}
-
-		Component {
-			id: __commandDialogRemoveComponent
-			Dialogs.CommandDialog {
-				mode: mREMOVE_MODE
-				onClose: __commandDialogRemoveLoader.active = false
-				onNeedUpdateCommands: updateModel()
-			}
-		}
-
-		Component {
-			id: __sensorDialogAddComponent
-			Dialogs.SensorDialog {
-				mode: mADD_MODE
-				onClose: __sensorDialogAddLoader.active = false
-				onNeedUpdateSensors: updateModel()
-			}
-		}
-
-		Component {
-			id: __sensorDialogEditComponent
-			Dialogs.SensorDialog {
-				mode: mEDIT_MODE
-				onClose: __sensorDialogEditLoader.active = false
-				onNeedUpdateSensors: updateModel()
-			}
-		}
-
-		Component {
-			id: __sensorDialogRemoveComponent
-			Dialogs.SensorDialog {
-				mode: mREMOVE_MODE
-				onClose: __sensorDialogRemoveLoader.active = false
-				onNeedUpdateSensors: updateModel()
-			}
-		}
-	}
-
-	Loader {
-		id: __commandDialogAddLoader
-		sourceComponent: __commandDialogAddComponent
-		active: false
 		anchors.fill: parent
 
-		onItemChanged: {
-			if(!!item){
-				item.house = __housesList.lastSelectedHouse
-			}
-		}
+		onNeedUpdate: updateModel()
 	}
 
-	Loader {
-		id: __commandDialogEditLoader
-		sourceComponent: __commandDialogEditComponent
-		active: false
+	Dialogs.CommandDialog {
+		id: __commandDialog
+		house: __housesList.lastSelectedHouse
+		command: __housesList.lastSelectedCommand
+
+		visible: false
+
 		anchors.fill: parent
 
-		onItemChanged: {
-			if(!!item){
-				item.house = __housesList.lastSelectedHouse
-				item.command = __housesList.lastSelectedCommand
-			}
-		}
-	}
-
-	Loader {
-		id: __commandDialogRemoveLoader
-		sourceComponent: __commandDialogRemoveComponent
-		active: false
-		anchors.fill: parent
-
-		onItemChanged: {
-			if(!!item){
-				item.house = __housesList.lastSelectedHouse
-				item.command = __housesList.lastSelectedCommand
-			}
-		}
-	}
-
-	Loader {
-		id: __sensorDialogAddLoader
-		sourceComponent: __sensorDialogAddComponent
-		active: false
-		anchors.fill: parent
-
-		onItemChanged: {
-			if(!!item){
-				item.house = __housesList.lastSelectedHouse
-			}
-		}
-	}
-
-	Loader {
-		id: __sensorDialogEditLoader
-		sourceComponent: __sensorDialogEditComponent
-		active: false
-		anchors.fill: parent
-
-		onItemChanged: {
-			if(!!item){
-				item.house = __housesList.lastSelectedHouse
-				item.sensor = __housesList.lastSelectedSensor
-			}
-		}
-	}
-
-	Loader {
-		id: __sensorDialogRemoveLoader
-		sourceComponent: __sensorDialogRemoveComponent
-		active: false
-		anchors.fill: parent
-
-		onItemChanged: {
-			if(!!item){
-				item.house = __housesList.lastSelectedHouse
-				item.sensor = __housesList.lastSelectedSensor
-			}
-		}
+		onNeedUpdate: updateModel()
 	}
 
 	function updateModel(){

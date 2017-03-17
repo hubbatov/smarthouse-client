@@ -40,6 +40,27 @@ Rectangle {
 				text: !!command ? command.name : ""
 			}
 
+			Item{
+				Layout.fillWidth: true
+			}
+
+			Buttons.EditButton {
+				onClicked: {
+					editRequest(house, command)
+				}
+			}
+
+			Buttons.RemoveButton {
+				onClicked: {
+					removeRequest(house, command)
+				}
+			}
+		}
+
+		Flow {
+			spacing: 10
+			Layout.fillWidth: true
+
 			Repeater {
 				model: __controlsModel
 
@@ -59,23 +80,6 @@ Rectangle {
 
 						Global.Application.restProvider.post(commandRunString, JSON.stringify(cmd), parseAnswer)
 					}
-
-				}
-			}
-
-			Item{
-				Layout.fillWidth: true
-			}
-
-			Buttons.EditButton {
-				onClicked: {
-					editRequest(house, command)
-				}
-			}
-
-			Buttons.RemoveButton {
-				onClicked: {
-					removeRequest(house, command)
 				}
 			}
 		}
@@ -89,6 +93,7 @@ Rectangle {
 		__controlsModel.clear()
 
 		if(!command) return
+		if(!command.available_values) return
 
 		var array = JSON.parse(command.available_values)
 		if(array.length > 0){

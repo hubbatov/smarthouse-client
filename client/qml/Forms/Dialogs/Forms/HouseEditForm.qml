@@ -29,12 +29,10 @@ Rectangle {
 			rowSpacing: 20
 
 			Layout.fillWidth: true
-			implicitHeight: __nameLabel.height + __addressLabel.height + 60
+			implicitHeight: __editNameInput.height + __editAddressInput.height + 60
 
 			Controls.LabelBold {
-				id: __nameLabel
 				text: qsTr("Name")
-				color: Global.ApplicationStyle.foreground
 			}
 
 			Controls.TextInput {
@@ -44,9 +42,7 @@ Rectangle {
 			}
 
 			Controls.LabelBold {
-				id: __addressLabel
 				text: qsTr("Address")
-				color: Global.ApplicationStyle.foreground
 			}
 
 			Controls.TextInput {
@@ -63,9 +59,7 @@ Rectangle {
 
 			Controls.Button {
 				text: qsTr("Accept")
-
 				enabled: __editNameInput.text && __editAddressInput.text
-
 				onClicked: {
 					var houseEditRequestString = "users/" + Global.Application.restProvider.currentUserId()
 					houseEditRequestString += "/houses"
@@ -81,7 +75,6 @@ Rectangle {
 
 			Controls.Button {
 				text: qsTr("Reject")
-
 				onClicked: {
 					canceled()
 				}

@@ -4,53 +4,59 @@ import QtQuick.Layouts 1.1
 import "../../../Controls" as Controls
 import "../../.." as Global
 
-ColumnLayout {
+Rectangle {
+	color: Global.ApplicationStyle.frame
+
+	implicitHeight: __layout.height + 20
+	anchors.centerIn: parent
 
 	property var house: null
 	property var command: null
-
-	anchors.fill: parent
-
-	spacing: 15
-
 	signal removed()
+	signal canceled()
 
-	Item {
-		Layout.fillHeight: true
-	}
+	ColumnLayout {
+		id: __layout
 
-	Controls.LabelBold {
-		text: qsTr("Remove command")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		anchors.margins: 10
+		anchors.fill: parent
 
-	Controls.LabelBold {
-		text: (!!command ? command.name : "undefined") + " " + qsTr("will be removed. Are you sure?")
+		spacing: 15
 
-		wrapMode: Text.WordWrap
+		implicitHeight: __questionLabel.height + 20
 
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		Controls.LabelBold {
+			id: __questionLabel
+			Layout.fillWidth: true
+			text: (!!command ? command.name : "undefined") + " " + qsTr("will be removed. Are you sure?")
 
-	Controls.Button {
-		text: qsTr("Remove command")
-
-		anchors.horizontalCenter: parent.horizontalCenter
-
-		onClicked: {
-
-			var commandRemoveRequestString = "users/" + Global.Application.restProvider.currentUserId()
-			commandRemoveRequestString += "/houses/" + house.id
-			commandRemoveRequestString += "/commands"
-
-			Global.Application.restProvider.del(commandRemoveRequestString, command.id, undefined, commandRemoved)
+			wrapMode: Text.WordWrap
+			anchors.horizontalCenter: parent.horizontalCenter
 		}
-	}
 
-	Item {
-		Layout.fillHeight: true
+		RowLayout {
+			Item {
+				Layout.fillWidth: true
+			}
+
+			Controls.Button {
+				text: qsTr("Accept")
+				onClicked: {
+					var commandRemoveRequestString = "users/" + Global.Application.restProvider.currentUserId()
+					commandRemoveRequestString += "/houses/" + house.id
+					commandRemoveRequestString += "/commands"
+
+					Global.Application.restProvider.del(commandRemoveRequestString, command.id, undefined, commandRemoved)
+				}
+			}
+
+			Controls.Button {
+				text: qsTr("Reject")
+				onClicked: {
+					canceled()
+				}
+			}
+		}
 	}
 
 	function commandRemoved(){

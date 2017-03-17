@@ -8,68 +8,53 @@ import "../../Controls/FunctionalButtons" as Buttons
 
 import "../.." as Global
 
-Rectangle{
+AbstractDialog{
 	id: __dialog
-
-	color: Global.ApplicationStyle.background
-	opacity: 0.95
-
-	readonly property int mADD_MODE: 1
-	readonly property int mEDIT_MODE: 2
-	readonly property int mREMOVE_MODE: 3
 
 	property var house: null
 	property var command: null
 
-	property int mode: mADD_MODE
-
-	signal close()
-	signal needUpdateCommands()
-
-	Buttons.CloseButton {
-		anchors.top: parent.top; anchors.topMargin: 5
-		anchors.right: parent.right; anchors.rightMargin: 5
-
-		onClicked: {
-			__dialog.close()
+	Component{
+		id: __addFormComponent
+		DialogForms.CommandAddForm {
+			house: __dialog.house
+			onAdded: success()
+			onCanceled: closeDialog()
 		}
 	}
 
-	DialogForms.CommandAddForm {
-		visible: mode === mADD_MODE
-
-		house: __dialog.house
-
-		onAdded: {
-			success()
+	Component {
+		id: __editFormComponent
+		DialogForms.CommandEditForm {
+			house: __dialog.house
+			command: __dialog.command
+			onEdited: success()
+			onCanceled: closeDialog()
 		}
 	}
 
-	DialogForms.CommandEditForm {
-		visible: mode === mEDIT_MODE
-
-		house: __dialog.house
-		command: __dialog.command
-
-		onEdited: {
-			success()
+	Component {
+		id: __removeFormComponent
+		DialogForms.CommandRemoveForm {
+			house: __dialog.house
+			command: __dialog.command
+			onRemoved: success()
+			onCanceled: closeDialog()
 		}
 	}
 
-	DialogForms.CommandRemoveForm {
-		visible: mode === mREMOVE_MODE
-
-		house: __dialog.house
-		command: __dialog.command
-
-		onRemoved: {
-			success()
-		}
+	currentComponent: function(){
+		if(mode === mADD_MODE) return __addFormComponent
+		if(mode === mEDIT_MODE) return __editFormComponent
+		if(mode === mREMOVE_MODE) return __removeFormComponent
+		return null
 	}
 
-	function success(){
-		__dialog.needUpdateCommands()
-		__dialog.close()
+	currentTitle: function(){
+		if(mode === mADD_MODE) return qsTr("New command")
+		if(mode === mEDIT_MODE) return qsTr("Edit command")
+		if(mode === mREMOVE_MODE) return qsTr("Remove command")
+		return ""
 	}
 }
 

@@ -4,74 +4,84 @@ import QtQuick.Layouts 1.1
 import "../../../Controls" as Controls
 import "../../.." as Global
 
-ColumnLayout {
+Rectangle{
+	color: Global.ApplicationStyle.frame
 
-	anchors.fill: parent
-
-	spacing: 15
+	implicitHeight: __layout.implicitHeight + 20
+	anchors.centerIn: parent
 
 	property var house: null
-
 	signal added()
+	signal canceled()
 
-	Item {
-		Layout.fillHeight: true
-	}
+	ColumnLayout {
+		id: __layout
 
-	Controls.LabelBold {
-		text: qsTr("Add sensor")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		anchors.margins: 10
+		anchors.fill: parent
 
-	Controls.LabelBold {
-		text: qsTr("Name")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		spacing: 15
 
-	Controls.TextInput {
-		id: __addNameInput
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		GridLayout {
+			columns: 2
 
-	Controls.LabelBold {
-		text: qsTr("Tag")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+			columnSpacing: 10
+			rowSpacing: 20
 
-	Controls.TextInput {
-		id: __addTagInput
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+			Layout.fillWidth: true
+			implicitHeight: __addNameInput.height + __addTagInput.height + 60
 
-
-	Controls.Button {
-		text: qsTr("Add sensor")
-
-		enabled: __addNameInput.text && __addTagInput.text
-		anchors.horizontalCenter: parent.horizontalCenter
-
-		onClicked: {
-
-			var sensorAddRequestString = "users/" + Global.Application.restProvider.currentUserId()
-			sensorAddRequestString += "/houses/" + house.id
-			sensorAddRequestString += "/sensors"
-
-			var newSensor = {
-				"name": __addNameInput.text,
-				"tag": __addTagInput.text
+			Controls.LabelBold {
+				text: qsTr("Name")
 			}
 
-			Global.Application.restProvider.create(sensorAddRequestString, JSON.stringify(newSensor), undefined, sensorAdded)
+			Controls.TextInput {
+				id: __addNameInput
+				Layout.fillWidth: true
+			}
+
+			Controls.LabelBold {
+				text: qsTr("Tag")
+			}
+
+			Controls.TextInput {
+				id: __addTagInput
+				Layout.fillWidth: true
+			}
+		}
+
+		RowLayout {
+			Item {
+				Layout.fillWidth: true
+			}
+
+			Controls.Button {
+				text: qsTr("Accept")
+
+				enabled: __addNameInput.text && __addTagInput.text
+
+				onClicked: {
+					var sensorAddRequestString = "users/" + Global.Application.restProvider.currentUserId()
+					sensorAddRequestString += "/houses/" + house.id
+					sensorAddRequestString += "/sensors"
+
+					var newSensor = {
+						"name": __addNameInput.text,
+						"tag": __addTagInput.text
+					}
+
+					Global.Application.restProvider.create(sensorAddRequestString, JSON.stringify(newSensor), undefined, sensorAdded)
+				}
+			}
+
+			Controls.Button {
+				text: qsTr("Reject")
+				onClicked: {
+					canceled()
+				}
+			}
 		}
 	}
-
-	Item {
-		Layout.fillHeight: true
-	}
-
 	function sensorAdded(){
 		added()
 	}

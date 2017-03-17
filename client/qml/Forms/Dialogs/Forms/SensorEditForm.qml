@@ -4,74 +4,85 @@ import QtQuick.Layouts 1.1
 import "../../../Controls" as Controls
 import "../../.." as Global
 
-ColumnLayout {
+Rectangle{
+	color: Global.ApplicationStyle.frame
+
+	implicitHeight: __layout.implicitHeight + 20
+	anchors.centerIn: parent
 
 	property var house: null
 	property var sensor: null
-
-	anchors.fill: parent
-
-	spacing: 15
-
 	signal edited()
+	signal canceled()
 
-	Item {
-		Layout.fillHeight: true
-	}
+	ColumnLayout {
+		id: __layout
 
-	Controls.LabelBold {
-		text: qsTr("Edit sensor")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		anchors.margins: 10
+		anchors.fill: parent
 
-	Controls.LabelBold {
-		text: qsTr("Name")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		spacing: 15
 
-	Controls.TextInput {
-		id: __editNameInput
-		text: !!sensor ? sensor.name : ""
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		GridLayout {
+			columns: 2
 
-	Controls.LabelBold {
-		text: qsTr("Tag")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+			columnSpacing: 10
+			rowSpacing: 20
 
-	Controls.TextInput {
-		id: __editTagInput
-		text: !!sensor ? sensor.tag : ""
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+			Layout.fillWidth: true
+			implicitHeight: __editNameInput.height + __editTagInput.height + 60
 
-	Controls.Button {
-		text: qsTr("Edit sensor")
-
-		enabled: __editNameInput.text && __editTagInput.text
-		anchors.horizontalCenter: parent.horizontalCenter
-
-		onClicked: {
-
-			var sensorEditRequestString = "users/" + Global.Application.restProvider.currentUserId()
-			sensorEditRequestString += "/houses/" + house.id
-			sensorEditRequestString += "/sensors"
-
-			var editedSensor = {
-				"name": __editNameInput.text,
-				"tag": __editTagInput.text
+			Controls.LabelBold {
+				text: qsTr("Name")
 			}
 
-			Global.Application.restProvider.update(sensorEditRequestString,  sensor.id, JSON.stringify(editedSensor), undefined, sensorEdited)
-		}
-	}
+			Controls.TextInput {
+				id: __editNameInput
+				text: !!sensor ? sensor.name : ""
+				Layout.fillWidth: true
+			}
 
-	Item {
-		Layout.fillHeight: true
+			Controls.LabelBold {
+				text: qsTr("Tag")
+			}
+
+			Controls.TextInput {
+				id: __editTagInput
+				text: !!sensor ? sensor.tag : ""
+				Layout.fillWidth: true
+			}
+
+		}
+
+		RowLayout {
+			Item {
+				Layout.fillWidth: true
+			}
+
+			Controls.Button {
+				text: qsTr("Accept")
+				enabled: __editNameInput.text && __editTagInput.text
+				onClicked: {
+					var sensorEditRequestString = "users/" + Global.Application.restProvider.currentUserId()
+					sensorEditRequestString += "/houses/" + house.id
+					sensorEditRequestString += "/sensors"
+
+					var editedSensor = {
+						"name": __editNameInput.text,
+						"tag": __editTagInput.text
+					}
+
+					Global.Application.restProvider.update(sensorEditRequestString,  sensor.id, JSON.stringify(editedSensor), undefined, sensorEdited)
+				}
+			}
+
+			Controls.Button {
+				text: qsTr("Reject")
+				onClicked: {
+					canceled()
+				}
+			}
+		}
 	}
 
 	function sensorEdited(){

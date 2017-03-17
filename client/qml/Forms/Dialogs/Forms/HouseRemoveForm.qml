@@ -30,8 +30,6 @@ Rectangle{
 			text: (!!house ? house.name : "undefined") + " " + qsTr("will be removed. Are you sure?")
 
 			wrapMode: Text.WordWrap
-
-			color: Global.ApplicationStyle.foreground
 			anchors.horizontalCenter: parent.horizontalCenter
 		}
 

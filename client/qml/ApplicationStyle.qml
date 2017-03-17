@@ -13,6 +13,7 @@ QtObject{
 	property color positive: "#64C11D"
 	property color negative: "#FC4A3A"
 	property color frame: "#524F63"
+	property color header: "#1F1E26"
 
 	property int baseFontSize: 18
 

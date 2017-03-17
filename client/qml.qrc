@@ -44,5 +44,6 @@
         <file>qml/Controls/LabelHeader.qml</file>
         <file>qml/Controls/LabelItalic.qml</file>
         <file>qml/Controls/LabelRegular.qml</file>
+        <file>qml/Forms/Dialogs/AbstractDialog.qml</file>
     </qresource>
 </RCC>

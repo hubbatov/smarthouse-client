@@ -4,55 +4,59 @@ import QtQuick.Layouts 1.1
 import "../../../Controls" as Controls
 import "../../.." as Global
 
-ColumnLayout {
+Rectangle{
+	color: Global.ApplicationStyle.frame
+
+	implicitHeight: __layout.height + 20
+	anchors.centerIn: parent
 
 	property var house: null
 	property var sensor: null
-
-	anchors.fill: parent
-
-	spacing: 15
-
 	signal removed()
+	signal canceled()
 
-	Item {
-		Layout.fillHeight: true
-	}
+	ColumnLayout {
+		id: __layout
 
-	Controls.LabelBold {
-		text: qsTr("Remove sensor")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		anchors.margins: 10
+		anchors.fill: parent
 
-	Controls.LabelBold {
-		text: (!!sensor ? sensor.name : "undefined") + " " + qsTr("will be removed. Are you sure?")
+		spacing: 15
 
-		wrapMode: Text.WordWrap
+		implicitHeight: __questionLabel.height + 20
 
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		Controls.LabelBold {
+			id: __questionLabel
+			text: (!!sensor ? sensor.name : "undefined") + " " + qsTr("will be removed. Are you sure?")
 
-	Controls.Button {
-		text: qsTr("Remove sensor")
+			wrapMode: Text.WordWrap
+			anchors.horizontalCenter: parent.horizontalCenter
+		}
 
-		anchors.horizontalCenter: parent.horizontalCenter
+		RowLayout {
+			Item {
+				Layout.fillWidth: true
+			}
 
-		onClicked: {
+			Controls.Button {
+				text: qsTr("Accept")
+				onClicked: {
+					var sensorRemoveRequestString = "users/" + Global.Application.restProvider.currentUserId()
+					sensorRemoveRequestString += "/houses/" + house.id
+					sensorRemoveRequestString += "/sensors"
 
-			var sensorRemoveRequestString = "users/" + Global.Application.restProvider.currentUserId()
-			sensorRemoveRequestString += "/houses/" + house.id
-			sensorRemoveRequestString += "/sensors"
+					Global.Application.restProvider.del(sensorRemoveRequestString, sensor.id, undefined, sensorRemoved)
+				}
+			}
 
-			Global.Application.restProvider.del(sensorRemoveRequestString, sensor.id, undefined, sensorRemoved)
+			Controls.Button {
+				text: qsTr("Reject")
+				onClicked: {
+					canceled()
+				}
+			}
 		}
 	}
-
-	Item {
-		Layout.fillHeight: true
-	}
-
 	function sensorRemoved(){
 		removed()
 	}
