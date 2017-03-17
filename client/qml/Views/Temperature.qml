@@ -2,32 +2,32 @@ import QtQuick 2.5
 import ".." as Global
 
 Item{
-    id: __control
+	id: __control
 
-    property color background: Global.ApplicationStyle.background
-    property color foreground: Global.ApplicationStyle.foreground
+	property color background: Global.ApplicationStyle.frame
+	property color foreground: Global.ApplicationStyle.contrast
 
-    property int value: 0
+	property int value: 0
 
-    implicitWidth: 200
-    implicitHeight: 200
+	implicitWidth: 200
+	implicitHeight: 200
 
-    Rectangle {
-        id: __backgroundCircle
+	Rectangle {
+		id: __backgroundCircle
 
-        color: background
+		color: background
 
-        anchors.centerIn: parent
+		anchors.centerIn: parent
 
-        width: __control.width
-        height: __control.height
+		width: __control.width
+		height: __control.height
 
-        Text {
-            color: foreground
-            font.pixelSize: parent.width * 0.15
-            text: value + "°C"
+		Text {
+			color: foreground
+			font.pixelSize: parent.width * 0.15
+			text: value + "°C"
 
-            anchors.centerIn: parent
-        }
-    }
+			anchors.centerIn: parent
+		}
+	}
 }

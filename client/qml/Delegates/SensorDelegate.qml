@@ -13,7 +13,7 @@ Rectangle {
 	property var sensor: null
 
 	radius: 4
-	color: Global.ApplicationStyle.background
+	color: Global.ApplicationStyle.frame
 
 	height: __mainLayout.implicitHeight + 30
 
@@ -28,7 +28,7 @@ Rectangle {
 		id: __mainLayout
 		spacing: 10
 
-		anchors.top: __delegate.top; anchors.topMargin: 10
+		anchors.verticalCenter: parent.verticalCenter
 		anchors.left: __delegate.left; anchors.leftMargin: 10
 		anchors.right: __delegate.right; anchors.rightMargin: 10
 
@@ -57,9 +57,9 @@ Rectangle {
 			}
 		}
 
-		Controls.LabelBold {
+		Controls.LabelRegular {
 			id: __sensorTagLabel
-			font.bold: false
+			font: Global.ApplicationStyle.smallFont
 			text: !!sensor ? qsTr("%1").arg(sensor.tag) : ""
 		}
 
@@ -71,7 +71,7 @@ Rectangle {
 
 			spacing: 10
 
-			property int lastDataSize: 50
+			property int lastDataSize: 80
 
 			Views.RoundPercents {
 				id: __percents
@@ -99,12 +99,8 @@ Rectangle {
 			}
 		}
 
-		Controls.LabelBold {
-			font.bold: false
-			font.italic: true
-
+		Controls.LabelItalic {
 			visible: __sensorDataModel.count === 0
-
 			text: qsTr("No data available")
 		}
 	}

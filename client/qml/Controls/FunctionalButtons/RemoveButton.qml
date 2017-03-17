@@ -7,5 +7,5 @@ FunctionalButton {
 	iconSize: 20
 	icon: "qrc:/icons/remove.png"
 
-	color: "#787878"
+	color: Global.ApplicationStyle.contrast
 }

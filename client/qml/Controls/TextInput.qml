@@ -7,16 +7,18 @@ Rectangle{
 	property alias text: __input.text
 	property alias echoMode: __input.echoMode
 
-	width: Global.ApplicationStyle.style().control_width
-	height: Global.ApplicationStyle.style().control_height
+	width: 200
+	height: 30
 	radius: 5
 
 	border.color: Global.ApplicationStyle.border
 
 	TextInput {
 		id: __input
-		font.bold: true
-		font.pixelSize: Global.ApplicationStyle.style().font_pixel_size
+		font: Global.ApplicationStyle.regularFont
+
+		clip: true
+
 		verticalAlignment: TextInput.AlignVCenter
 		horizontalAlignment: TextInput.AlignHCenter
 

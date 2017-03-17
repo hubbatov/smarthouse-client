@@ -7,5 +7,5 @@ FunctionalButton {
 	iconSize: 40
 	icon: "qrc:/icons/close.png"
 
-	color: "#F77145"
+	color: Global.ApplicationStyle.negative
 }

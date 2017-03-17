@@ -13,7 +13,7 @@ Rectangle {
 	property var command: null
 
 	radius: 4
-	color: Global.ApplicationStyle.background
+	color: Global.ApplicationStyle.frame
 
 	height: __mainLayout.implicitHeight + 30
 
@@ -28,7 +28,7 @@ Rectangle {
 		id: __mainLayout
 		spacing: 10
 
-		anchors.top: __delegate.top; anchors.topMargin: 10
+		anchors.verticalCenter: parent.verticalCenter
 		anchors.left: __delegate.left; anchors.leftMargin: 10
 		anchors.right: __delegate.right; anchors.rightMargin: 10
 
@@ -43,36 +43,23 @@ Rectangle {
 			Repeater {
 				model: __controlsModel
 
-				delegate: Rectangle {
-					border.color: "black"
-					radius: 3
+				delegate: Controls.Button{
+					text: name
 
-					implicitWidth: __textAction.width + 10
-					implicitHeight: 20
+					onClicked: {
+						var commandRunString = "commands/do"
 
-					Controls.LabelBold {
-						id: __textAction
-						text: name
-						anchors.centerIn: parent
-					}
-
-					MouseArea {
-						anchors.fill: parent
-
-						onClicked: {
-							var commandRunString = "commands/do"
-
-							var cmd = {
-								"id": __delegate.command.id,
-								"query": __delegate.command.query,
-								"suffix": suffix,
-								"type": __delegate.command.command_type,
-								"body": ""
-							}
-
-							Global.Application.restProvider.post(commandRunString, JSON.stringify(cmd), parseAnswer)
+						var cmd = {
+							"id": __delegate.command.id,
+							"query": __delegate.command.query,
+							"suffix": suffix,
+							"type": __delegate.command.command_type,
+							"body": ""
 						}
+
+						Global.Application.restProvider.post(commandRunString, JSON.stringify(cmd), parseAnswer)
 					}
+
 				}
 			}
 

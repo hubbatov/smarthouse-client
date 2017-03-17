@@ -4,68 +4,87 @@ import QtQuick.Layouts 1.1
 import "../../../Controls" as Controls
 import "../../.." as Global
 
-ColumnLayout {
+Rectangle {
+	color: Global.ApplicationStyle.frame
 
-	anchors.fill: parent
-
-	spacing: 15
+	implicitHeight: __layout.implicitHeight + 20
+	anchors.centerIn: parent
 
 	signal added()
+	signal canceled()
 
-	Item {
-		Layout.fillHeight: true
-	}
+	ColumnLayout {
+		id: __layout
 
-	Controls.LabelBold {
-		text: qsTr("Add house")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		anchors.margins: 10
+		anchors.fill: parent
 
-	Controls.LabelBold {
-		text: qsTr("Name")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		spacing: 15
 
-	Controls.TextInput {
-		id: __addNameInput
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		GridLayout {
+			columns: 2
 
-	Controls.LabelBold {
-		text: qsTr("Address")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+			columnSpacing: 10
+			rowSpacing: 20
 
-	Controls.TextInput {
-		id: __addAddressInput
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+			Layout.fillWidth: true
+			implicitHeight: __nameLabel.height + __addressLabel.height + 60
 
-	Controls.Button {
-		text: qsTr("Add house")
-
-		enabled: __addNameInput.text && __addAddressInput.text
-		anchors.horizontalCenter: parent.horizontalCenter
-
-		onClicked: {
-
-			var houseAddRequestString = "users/" + Global.Application.restProvider.currentUserId()
-			houseAddRequestString += "/houses"
-
-			var newHouse = {
-				"name": __addNameInput.text,
-				"address": __addAddressInput.text
+			Controls.LabelBold {
+				id: __nameLabel
+				text: qsTr("Name")
+				color: Global.ApplicationStyle.foreground
 			}
 
-			Global.Application.restProvider.create(houseAddRequestString, JSON.stringify(newHouse), undefined, houseAdded)
-		}
-	}
+			Controls.TextInput {
+				id: __addNameInput
+				Layout.fillWidth: true
+			}
 
-	Item {
-		Layout.fillHeight: true
+			Controls.LabelBold {
+				id: __addressLabel
+				text: qsTr("Address")
+				color: Global.ApplicationStyle.foreground
+			}
+
+			Controls.TextInput {
+				id: __addAddressInput
+				Layout.fillWidth: true
+			}
+		}
+
+		RowLayout {
+			Item {
+				Layout.fillWidth: true
+			}
+
+			Controls.Button {
+				text: qsTr("Accept")
+
+				enabled: __addNameInput.text && __addAddressInput.text
+
+				onClicked: {
+
+					var houseAddRequestString = "users/" + Global.Application.restProvider.currentUserId()
+					houseAddRequestString += "/houses"
+
+					var newHouse = {
+						"name": __addNameInput.text,
+						"address": __addAddressInput.text
+					}
+
+					Global.Application.restProvider.create(houseAddRequestString, JSON.stringify(newHouse), undefined, houseAdded)
+				}
+			}
+
+			Controls.Button {
+				text: qsTr("Reject")
+
+				onClicked: {
+					canceled()
+				}
+			}
+		}
 	}
 
 	function houseAdded(){

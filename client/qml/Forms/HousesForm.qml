@@ -11,6 +11,8 @@ import "../Delegates" as Delegates
 import ".." as Global
 
 Item{
+	id: __root
+
 	ListModel {
 		id: __housesModel
 	}
@@ -18,7 +20,7 @@ Item{
 	ListView {
 		id: __housesList
 
-		spacing: 10
+		spacing: 20
 
 		anchors.fill: parent
 		anchors.bottomMargin: __footer.height
@@ -28,9 +30,7 @@ Item{
 		enabled: needEnable()
 
 		function needEnable(){
-			return !__houseDialogAddLoader.active
-					&& !__houseDialogEditLoader.active
-					&& !__houseDialogRemoveLoader.active
+			return !__houseDialog.visible
 					&& !__commandDialogAddLoader.active
 					&& !__commandDialogEditLoader.active
 					&& !__commandDialogRemoveLoader.active
@@ -50,12 +50,12 @@ Item{
 
 			onEditRequest: {
 				__housesList.lastSelectedHouse = house
-				__houseDialogEditLoader.active = true
+				__houseDialog.enterEditMode()
 			}
 
 			onRemoveRequest: {
 				__housesList.lastSelectedHouse = house
-				__houseDialogRemoveLoader.active = true
+				__houseDialog.enterRemoveMode()
 			}
 
 			onAddCommandRequest: {
@@ -122,38 +122,21 @@ Item{
 		anchors.bottom: parent.bottom; anchors.bottomMargin: 5
 
 		onClicked: {
-			__houseDialogAddLoader.active = true
+			__houseDialog.enterAddMode()
 		}
 	}
 
+	Dialogs.HouseDialog {
+		id: __houseDialog
+		house: __housesList.lastSelectedHouse
+		visible: false
+
+		anchors.fill: parent
+
+		onNeedUpdateHouses: updateModel()
+	}
+
 	Item {
-		Component {
-			id: __houseDialogAddComponent
-			Dialogs.HouseDialog {
-				mode: mADD_MODE
-				onClose: __houseDialogAddLoader.active = false
-				onNeedUpdateHouses: updateModel()
-			}
-		}
-
-		Component {
-			id: __houseDialogEditComponent
-			Dialogs.HouseDialog {
-				mode: mEDIT_MODE
-				onClose: __houseDialogEditLoader.active = false
-				onNeedUpdateHouses: updateModel()
-			}
-		}
-
-		Component {
-			id: __houseDialogRemoveComponent
-			Dialogs.HouseDialog {
-				mode: mREMOVE_MODE
-				onClose: __houseDialogRemoveLoader.active = false
-				onNeedUpdateHouses: updateModel()
-			}
-		}
-
 		Component {
 			id: __commandDialogAddComponent
 			Dialogs.CommandDialog {
@@ -206,37 +189,6 @@ Item{
 				onClose: __sensorDialogRemoveLoader.active = false
 				onNeedUpdateSensors: updateModel()
 			}
-		}
-	}
-
-	Loader {
-		id: __houseDialogAddLoader
-		sourceComponent: __houseDialogAddComponent
-		active: false
-		anchors.fill: parent
-	}
-
-	Loader {
-		id: __houseDialogEditLoader
-		sourceComponent: __houseDialogEditComponent
-		active: false
-		anchors.fill: parent
-
-		onItemChanged: {
-			if(!!item)
-				item.house = __housesList.lastSelectedHouse
-		}
-	}
-
-	Loader {
-		id: __houseDialogRemoveLoader
-		sourceComponent: __houseDialogRemoveComponent
-		active: false
-		anchors.fill: parent
-
-		onItemChanged: {
-			if(!!item)
-				item.house = __housesList.lastSelectedHouse
 		}
 	}
 

@@ -1,5 +1,6 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.1
+import QtGraphicalEffects 1.0
 
 import "../Forms/Dialogs" as Dialogs
 
@@ -36,13 +37,31 @@ Rectangle {
 		id: __commandsModel
 	}
 
+	LinearGradient {
+		id: __footer
+
+		anchors.left: parent.left
+		anchors.right: parent.right
+		anchors.top: parent.top
+		height: __houseLabel.height
+
+		start: Qt.point(0, 0)
+		end: Qt.point(0, __houseLabel.height)
+		gradient: Gradient {
+			GradientStop { position: 0.0; color: "transparent" }
+			GradientStop { position: 0.5; color: Global.ApplicationStyle.frame }
+			GradientStop { position: 1.0; color: "transparent" }
+		}
+	}
+
+
 	RowLayout{
 		anchors.top: __delegate.top; anchors.topMargin: 5
 		anchors.right: __delegate.right; anchors.rightMargin: 5
 
 		Buttons.AddButton{
 			iconSize: 20
-			color: "#787878"
+			color: Global.ApplicationStyle.contrast
 
 			onClicked: {
 				addCommandRequest(house)
@@ -51,7 +70,7 @@ Rectangle {
 
 		Buttons.AddButton{
 			iconSize: 20
-			color: "#787878"
+			color: Global.ApplicationStyle.contrast
 
 			onClicked: {
 				addSensorRequest(house)
@@ -85,17 +104,14 @@ Rectangle {
 			text: !!house ? house.name : ""
 		}
 
-		Controls.LabelBold {
+		Controls.LabelRegular {
 			id: __houseDescriptionLabel
-			font.bold: false
-			font.pixelSize: 12
+			font: Global.ApplicationStyle.smallFont
 			text: !!house ? house.address : ""
 		}
 
-		Controls.LabelBold {
+		Controls.LabelItalic {
 			id: __houseNoSensorsLabel
-			font.bold: false
-			font.italic: true
 			text: qsTr("No sensors available")
 			visible: __sensorsModel.count === 0 && __commandsView.count
 		}

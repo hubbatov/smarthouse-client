@@ -4,51 +4,59 @@ import QtQuick.Layouts 1.1
 import "../../../Controls" as Controls
 import "../../.." as Global
 
-ColumnLayout {
+Rectangle{
+	color: Global.ApplicationStyle.frame
+
+	implicitHeight: __layout.height + 20
+	anchors.centerIn: parent
 
 	property var house: null
-
-	anchors.fill: parent
-
-	spacing: 15
-
 	signal removed()
+	signal canceled()
 
-	Item {
-		Layout.fillHeight: true
-	}
+	ColumnLayout {
+		id: __layout
 
-	Controls.LabelBold {
-		text: qsTr("Remove house")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		anchors.margins: 10
+		anchors.fill: parent
 
-	Controls.LabelBold {
-		text: (!!house ? house.name : "undefined") + " " + qsTr("will be removed. Are you sure?")
+		spacing: 15
 
-		wrapMode: Text.WordWrap
+		implicitHeight: __questionLabel.height + 20
 
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		Controls.LabelBold {
+			id: __questionLabel
+			Layout.fillWidth: true
+			text: (!!house ? house.name : "undefined") + " " + qsTr("will be removed. Are you sure?")
 
-	Controls.Button {
-		text: qsTr("Remove house")
+			wrapMode: Text.WordWrap
 
-		anchors.horizontalCenter: parent.horizontalCenter
-
-		onClicked: {
-
-			var houseEditRequestString = "users/" + Global.Application.restProvider.currentUserId()
-			houseEditRequestString += "/houses"
-
-			Global.Application.restProvider.del(houseEditRequestString,  house.id, undefined, houseRemoved)
+			color: Global.ApplicationStyle.foreground
+			anchors.horizontalCenter: parent.horizontalCenter
 		}
-	}
 
-	Item {
-		Layout.fillHeight: true
+		RowLayout {
+			Item {
+				Layout.fillWidth: true
+			}
+
+			Controls.Button {
+				text: qsTr("Accept")
+				onClicked: {
+					var houseEditRequestString = "users/" + Global.Application.restProvider.currentUserId()
+					houseEditRequestString += "/houses"
+
+					Global.Application.restProvider.del(houseEditRequestString,  house.id, undefined, houseRemoved)
+				}
+			}
+
+			Controls.Button {
+				text: qsTr("Reject")
+				onClicked: {
+					canceled()
+				}
+			}
+		}
 	}
 
 	function houseRemoved(){

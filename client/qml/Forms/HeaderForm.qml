@@ -6,43 +6,61 @@ import ".." as Global
 
 Rectangle{
 	color: Global.ApplicationStyle.backgroundHeader
-	height: 50
+	height: __layout.implicitHeight
 
 	signal logout()
 
-	RowLayout {
-
+	ColumnLayout {
+		id: __layout
 		anchors.fill: parent
 
 		Item {
-			width: 5
+			height: 5
 		}
 
-		Controls.LabelBold {
-			text: Global.Application.restProvider.currentUserName()
-			anchors.verticalCenter: parent.verticalCenter
-		}
+		RowLayout {
 
-		Item {
 			Layout.fillWidth: true
-		}
 
-		Controls.Button {
-			text: qsTr("Logout")
+			Item {
+				width: 5
+			}
 
-			width: 90
+			Controls.LabelHeader {
+				text: qsTr("Smarthouse")
+				anchors.verticalCenter: parent.verticalCenter
+			}
 
-			anchors.verticalCenter: parent.verticalCenter
+			Item {
+				Layout.fillWidth: true
+			}
 
-			onClicked: {
-				console.log("logout...")
-				Global.Application.restProvider.logout()
-				logout()
+			Controls.Button {
+				text: qsTr("Logout")
+				anchors.verticalCenter: parent.verticalCenter
+
+				color: Global.ApplicationStyle.negative
+
+				onClicked: {
+					Global.Application.restProvider.logout()
+					logout()
+				}
+			}
+
+			Item {
+				width: 5
 			}
 		}
 
+		Rectangle {
+			color: Global.ApplicationStyle.contrast
+			Layout.fillWidth: true
+			height: 3
+			radius: 1.
+		}
+
 		Item {
-			width: 5
+			height: 5
 		}
 	}
 }

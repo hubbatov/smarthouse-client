@@ -7,5 +7,5 @@ FunctionalButton {
 	iconSize: 20
 	icon: "qrc:/icons/edit.png"
 
-	color: "#787878"
+	color: Global.ApplicationStyle.contrast
 }

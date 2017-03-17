@@ -4,72 +4,89 @@ import QtQuick.Layouts 1.1
 import "../../../Controls" as Controls
 import "../../.." as Global
 
-ColumnLayout {
+Rectangle {
+	color: Global.ApplicationStyle.frame
+
+	implicitHeight: __layout.implicitHeight + 20
+	anchors.centerIn: parent
 
 	property var house: null
-
-	anchors.fill: parent
-
-	spacing: 15
-
 	signal edited()
+	signal canceled()
 
-	Item {
-		Layout.fillHeight: true
-	}
+	ColumnLayout {
+		id: __layout
 
-	Controls.LabelBold {
-		text: qsTr("Edit house")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		anchors.margins: 10
+		anchors.fill: parent
 
-	Controls.LabelBold {
-		text: qsTr("Name")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		spacing: 15
 
-	Controls.TextInput {
-		id: __editNameInput
-		text: !!house ? house.name : ""
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+		GridLayout {
+			columns: 2
 
-	Controls.LabelBold {
-		text: qsTr("Address")
-		color: Global.ApplicationStyle.foreground
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+			columnSpacing: 10
+			rowSpacing: 20
 
-	Controls.TextInput {
-		id: __editAddressInput
-		text: !!house ? house.address : ""
-		anchors.horizontalCenter: parent.horizontalCenter
-	}
+			Layout.fillWidth: true
+			implicitHeight: __nameLabel.height + __addressLabel.height + 60
 
-	Controls.Button {
-		text: qsTr("Edit house")
-
-		enabled: __editNameInput.text && __editAddressInput.text
-		anchors.horizontalCenter: parent.horizontalCenter
-
-		onClicked: {
-
-			var houseEditRequestString = "users/" + Global.Application.restProvider.currentUserId()
-			houseEditRequestString += "/houses"
-
-			var editedHouse = {
-				"name": __editNameInput.text,
-				"address": __editAddressInput.text
+			Controls.LabelBold {
+				id: __nameLabel
+				text: qsTr("Name")
+				color: Global.ApplicationStyle.foreground
 			}
 
-			Global.Application.restProvider.update(houseEditRequestString,  house.id, JSON.stringify(editedHouse), undefined, houseEdited)
-		}
-	}
+			Controls.TextInput {
+				id: __editNameInput
+				text: !!house ? house.name : ""
+				Layout.fillWidth: true
+			}
 
-	Item {
-		Layout.fillHeight: true
+			Controls.LabelBold {
+				id: __addressLabel
+				text: qsTr("Address")
+				color: Global.ApplicationStyle.foreground
+			}
+
+			Controls.TextInput {
+				id: __editAddressInput
+				text: !!house ? house.address : ""
+				Layout.fillWidth: true
+			}
+		}
+
+		RowLayout {
+			Item {
+				Layout.fillWidth: true
+			}
+
+			Controls.Button {
+				text: qsTr("Accept")
+
+				enabled: __editNameInput.text && __editAddressInput.text
+
+				onClicked: {
+					var houseEditRequestString = "users/" + Global.Application.restProvider.currentUserId()
+					houseEditRequestString += "/houses"
+
+					var editedHouse = {
+						"name": __editNameInput.text,
+						"address": __editAddressInput.text
+					}
+
+					Global.Application.restProvider.update(houseEditRequestString,  house.id, JSON.stringify(editedHouse), undefined, houseEdited)
+				}
+			}
+
+			Controls.Button {
+				text: qsTr("Reject")
+
+				onClicked: {
+					canceled()
+				}
+			}
+		}
 	}
 
 	function houseEdited(){

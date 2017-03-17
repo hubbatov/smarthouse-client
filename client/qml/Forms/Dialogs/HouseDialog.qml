@@ -25,45 +25,140 @@ Rectangle{
 	signal close()
 	signal needUpdateHouses()
 
-	Buttons.CloseButton {
-		anchors.top: parent.top; anchors.topMargin: 5
-		anchors.right: parent.right; anchors.rightMargin: 5
-
-		onClicked: {
-			__dialog.close()
+	Component{
+		id: __addFormComponent
+		DialogForms.HouseAddForm {
+			onAdded: {
+				success()
+			}
+			onCanceled: {
+				visible = false
+				closeDialog()
+			}
 		}
 	}
 
-	DialogForms.HouseAddForm {
-		visible: mode === mADD_MODE
-
-		onAdded: {
-			success()
+	Component{
+		id: __editFormComponent
+		DialogForms.HouseEditForm {
+			house: __dialog.house
+			onEdited: {
+				success()
+			}
+			onCanceled: {
+				visible = false
+				closeDialog()
+			}
 		}
 	}
 
-	DialogForms.HouseEditForm {
-		visible: mode === mEDIT_MODE
-
-		house: __dialog.house
-
-		onEdited: {
-			success()
+	Component{
+		id: __removeFormComponent
+		DialogForms.HouseRemoveForm {
+			house: __dialog.house
+			onRemoved: {
+				success()
+			}
+			onCanceled: {
+				closeDialog()
+			}
 		}
 	}
 
-	DialogForms.HouseRemoveForm {
-		visible: mode === mREMOVE_MODE
+	Rectangle {
 
-		house: __dialog.house
+		width: parent.width - 20
+		height: __mainLayout.implicitHeight
 
-		onRemoved: {
-			success()
+		color: "#1F1E26"
+
+		anchors.centerIn: parent
+
+		Rectangle {
+			width: parent.width
+			height: 20
+			radius: 10
+			color: "#1F1E26"
+
+			anchors.top: parent.top
+			anchors.topMargin: -10
 		}
+
+		ColumnLayout {
+			id: __mainLayout
+
+			anchors.fill: parent
+
+			RowLayout {
+				id: __headerLayout
+
+				implicitHeight: __headerLabel.height + 40
+
+				Item {
+					width: 5
+				}
+
+				Controls.LabelBold {
+					id: __headerLabel
+					text: currentTitle()
+					color: Global.ApplicationStyle.foreground
+				}
+
+				Item {
+					Layout.fillWidth: true
+				}
+
+				Buttons.CloseButton {
+					onClicked: {
+						closeDialog()
+					}
+				}
+			}
+
+			Loader {
+				id: __formLoader
+				Layout.fillWidth: true
+				sourceComponent: currentComponent()
+			}
+		}
+	}
+
+	function enterAddMode() {
+		mode = mADD_MODE
+		visible = true
+	}
+
+	function enterEditMode() {
+		mode = mEDIT_MODE
+		visible = true
+	}
+
+	function enterRemoveMode() {
+		mode = mREMOVE_MODE
+		visible = true
+	}
+
+	function currentComponent(){
+		if(mode === mADD_MODE) return __addFormComponent
+		if(mode === mEDIT_MODE) return __editFormComponent
+		if(mode === mREMOVE_MODE) return __removeFormComponent
+		return null
+	}
+
+	function currentTitle(){
+		if(mode === mADD_MODE) return qsTr("New house")
+		if(mode === mEDIT_MODE) return qsTr("Edit house")
+		if(mode === mREMOVE_MODE) return qsTr("Remove house")
+		return ""
 	}
 
 	function success(){
 		__dialog.needUpdateHouses()
+		closeDialog()
+	}
+
+	function closeDialog(){
+		visible = false
 		__dialog.close()
 	}
 }

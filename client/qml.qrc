@@ -41,5 +41,8 @@
         <file>qml/Forms/Dialogs/Forms/CommandAddForm.qml</file>
         <file>qml/Forms/Dialogs/Forms/CommandEditForm.qml</file>
         <file>qml/Forms/Dialogs/Forms/CommandRemoveForm.qml</file>
+        <file>qml/Controls/LabelHeader.qml</file>
+        <file>qml/Controls/LabelItalic.qml</file>
+        <file>qml/Controls/LabelRegular.qml</file>
     </qresource>
 </RCC>

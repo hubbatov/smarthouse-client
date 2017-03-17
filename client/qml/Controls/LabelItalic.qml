@@ -4,6 +4,6 @@ import Qt.labs.controls 1.0
 import ".." as Global
 
 Label {
-	font: Global.ApplicationStyle.boldFont
+	font: Global.ApplicationStyle.italicFont
 	color: Global.ApplicationStyle.foreground
 }

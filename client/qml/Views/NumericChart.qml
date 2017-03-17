@@ -7,8 +7,8 @@ Item{
 	width: 400
 	height: 200
 
-	property color background: Global.ApplicationStyle.background
-	property color foreground: Global.ApplicationStyle.foreground
+	property color background: Global.ApplicationStyle.frame
+	property color foreground: Global.ApplicationStyle.contrast
 
 	readonly property alias chartData: __data
 

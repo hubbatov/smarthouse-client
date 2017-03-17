@@ -5,12 +5,12 @@ import ".." as Global
 Rectangle{
 	id: __button
 
-	width: Global.ApplicationStyle.style().control_width
-	height: Global.ApplicationStyle.style().control_height
+	implicitWidth: __label.width + 10
+	implicitHeight: __label.height + 10
 	radius: 5
 
-	color: enabled ? Global.ApplicationStyle.button : Global.ApplicationStyle.buttonDisabled
-	border.color: Global.ApplicationStyle.border
+	color: enabled ? Global.ApplicationStyle.contrast : Global.ApplicationStyle.disabled
+	border.color: color
 
 	property alias text: __label.text
 	signal clicked()
@@ -20,10 +20,7 @@ Rectangle{
 
 		anchors.centerIn: parent
 
-		font.bold: true
-		font.pixelSize: Global.ApplicationStyle.style().font_pixel_size
-
-		color: Global.ApplicationStyle.foreground
+		color: Global.ApplicationStyle.background
 	}
 
 	MouseArea {

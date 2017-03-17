@@ -9,8 +9,8 @@ ApplicationWindow {
 
 	visible: true
 
-	width: 720
-	height: 600
+	minimumWidth: 400
+	minimumHeight: 600
 
 	title: qsTr("Smarthouse")
 
