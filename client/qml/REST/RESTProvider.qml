@@ -6,6 +6,8 @@ Item {
 	property string path
 	property string idField: "id"
 
+	signal loggedIn()
+
 	function currentUserId(){
 		if(__p.user)
 			return __p.user.id
@@ -55,7 +57,6 @@ Item {
 		__p.login = value.login
 		__p.password = value.password
 		__p.sendRequest("POST", __p.makeRequest(path + "/login", undefined, undefined, params), value, callback)
-		getUserData()
 	}
 
 	function logout(){
@@ -87,12 +88,14 @@ Item {
 	}
 
 	function getUserData(){
-		list("user", undefined, fillUserData)
+		if(!__p.user)
+			list("user", undefined, fillUserData)
 	}
 
 	function fillUserData(response){
 		if("answer" in response){
 			__p.user = JSON.parse(response.answer)
+			loggedIn()
 		}
 	}
 
@@ -157,6 +160,7 @@ Item {
 			else {
 				ret += ""
 			}
+			console.log(ret)
 			return ret
 		}
 		function successStatus(status) {

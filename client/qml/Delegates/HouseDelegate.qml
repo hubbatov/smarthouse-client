@@ -60,7 +60,7 @@ Rectangle {
 		anchors.right: __delegate.right; anchors.rightMargin: 5
 
 		Buttons.AddButton{
-			iconSize: 20
+			iconSize: Global.ApplicationStyle.iconSize
 			color: Global.ApplicationStyle.contrast
 
 			onClicked: {
@@ -69,7 +69,7 @@ Rectangle {
 		}
 
 		Buttons.AddButton{
-			iconSize: 20
+			iconSize: Global.ApplicationStyle.iconSize
 			color: Global.ApplicationStyle.contrast
 
 			onClicked: {

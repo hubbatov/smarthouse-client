@@ -8,7 +8,7 @@ Rectangle{
 	property alias echoMode: __input.echoMode
 
 	width: 200
-	height: 30
+	height: Global.ApplicationStyle.baseFontSize * 2
 	radius: 5
 
 	border.color: Global.ApplicationStyle.border

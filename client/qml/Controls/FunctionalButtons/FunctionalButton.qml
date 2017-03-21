@@ -9,7 +9,7 @@ Item {
 	width: iconSize
 	height: iconSize
 
-	property int iconSize: 20
+	property int iconSize: Global.ApplicationStyle.iconSize
 
 	property bool withShadow: false
 

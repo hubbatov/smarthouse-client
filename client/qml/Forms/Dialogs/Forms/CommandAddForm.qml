@@ -29,10 +29,13 @@ Rectangle {
 			rowSpacing: 20
 
 			Layout.fillWidth: true
-			implicitHeight: __addNameInput.height +
-							__addQueryInput.height +
-							__addTypeInput.height +
-							__addValuesInput.height + 100
+
+			Component.onCompleted: {
+				implicitHeight = __addNameInput.height +
+								__addQueryInput.height +
+								__addTypeInput.height +
+								__addValuesInput.height + 100
+			}
 
 			Controls.LabelBold {
 				text: qsTr("Name")

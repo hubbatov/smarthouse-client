@@ -11,79 +11,98 @@ Item{
 	signal loggedIn()
 	signal needRegister()
 
+	Connections {
+		target: Global.Application
+		onLoggedIn: {
+			loggedIn()
+		}
+	}
+
+	Settings {
+		id: __settings
+		property alias login: __loginInput.text
+		property alias password: __passwordInput.text
+	}
+
 	ColumnLayout {
 		id: __loginFormLayout
 		spacing: 10
+
+		anchors.margins: 10
 		anchors.fill: parent
 
-		Settings {
-			id: __settings
-			property alias login: __loginInput.text
-			property alias password: __passwordInput.text
-
-			Component.onCompleted: {
-				if(login && password){
-					tryLogin()
-				}
-			}
-		}
-
-		Item {
+		Item{
 			Layout.fillHeight: true
 		}
 
-		Controls.LabelBold {
-			text: qsTr("Username")
-			anchors.horizontalCenter: parent.horizontalCenter
-		}
+		GridLayout {
+			columns: 2
 
-		Controls.TextInput {
-			id: __loginInput
-			anchors.horizontalCenter: parent.horizontalCenter
-		}
+			columnSpacing: 10
+			rowSpacing: 20
 
-		Controls.LabelBold {
-			text: qsTr("Password")
-			anchors.horizontalCenter: parent.horizontalCenter
-		}
+			Layout.fillWidth: true
+			Component.onCompleted: {
+				implicitHeight = __loginInput.height +
+							__passwordInput.height + 60
+			}
 
-		Controls.TextInput {
-			id: __passwordInput
-			echoMode: TextInput.Password
-			anchors.horizontalCenter: parent.horizontalCenter
-		}
+			Controls.LabelBold {
+				text: qsTr("Username")
+			}
 
-		Controls.Button {
-			id: __loginButton
+			Controls.TextInput {
+				id: __loginInput
+				Layout.fillWidth: true
+			}
 
-			text: qsTr("Login")
+			Controls.LabelBold {
+				text: qsTr("Password")
+			}
 
-			enabled: __loginInput.text && __passwordInput.text
-			anchors.horizontalCenter: parent.horizontalCenter
-
-			onClicked: {
-				tryLogin()
+			Controls.TextInput {
+				id: __passwordInput
+				echoMode: TextInput.Password
+				Layout.fillWidth: true
 			}
 		}
 
-		Controls.Button {
-			text: qsTr("Register")
-			anchors.horizontalCenter: parent.horizontalCenter
+		RowLayout {
+			Item {
+				Layout.fillWidth: true
+			}
 
-			onClicked: {
-				console.log("register request...")
-				needRegister()
-				clearFields()
+			Controls.Button {
+				text: qsTr("Login")
+				enabled: __loginInput.text && __passwordInput.text
+
+				onClicked: {
+					tryLogin()
+				}
+			}
+
+			Controls.Button {
+				text: qsTr("Register")
+
+				onClicked: {
+					console.log("register request...")
+					needRegister()
+					clearFields()
+				}
+			}
+
+			Item {
+				Layout.fillWidth: true
 			}
 		}
 
-		Item {
+		Item{
 			Layout.fillHeight: true
 		}
 	}
 
 	function tryLogin(){
-		console.log("login...")
+		if(Global.Application.restProvider.currentUserId() !== 0) return
 
 		var userdata = {
 			"login": __loginInput.text,
@@ -93,16 +112,18 @@ Item{
 		Global.Application.restProvider.login(userdata, undefined, processLoginReply)
 	}
 
-	function processLoginReply(reply, error){
-		if("error" in reply){
-		}else{
-			loggedIn()
-		}
+	function processLoginReply(reply){
 		clearFields()
 	}
 
 	function clearFields(){
 		__passwordInput.text = ""
+	}
+
+	Component.onCompleted: {
+		if(__settings.login && __settings.password){
+			tryLogin()
+		}
 	}
 
 	Component.onDestruction: {

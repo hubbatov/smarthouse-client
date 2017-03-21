@@ -53,7 +53,9 @@ Rectangle{
 			RowLayout {
 				id: __headerLayout
 
-				implicitHeight: __headerLabel.height + 40
+				Component.onCompleted: {
+					implicitHeight = __headerLabel.height + 40
+				}
 
 				Item {
 					width: 5
@@ -67,12 +69,6 @@ Rectangle{
 
 				Item {
 					Layout.fillWidth: true
-				}
-
-				Buttons.CloseButton {
-					onClicked: {
-						closeDialog()
-					}
 				}
 			}
 

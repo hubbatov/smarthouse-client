@@ -112,8 +112,8 @@ Item{
 	}
 
 	Buttons.AddButton {
-		anchors.right: parent.right; anchors.rightMargin: 5
-		anchors.bottom: parent.bottom; anchors.bottomMargin: 5
+		anchors.right: parent.right; anchors.rightMargin: Global.ApplicationStyle.iconSize / 2
+		anchors.bottom: parent.bottom; anchors.bottomMargin: Global.ApplicationStyle.iconSize / 2
 
 		onClicked: {
 			__houseDialog.enterAddMode()

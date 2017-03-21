@@ -15,7 +15,8 @@ QtObject{
 	property color frame: "#524F63"
 	property color header: "#1F1E26"
 
-	property int baseFontSize: 18
+	property int baseFontSize: 20
+	property int iconSize: 32
 
 	readonly property string primary_family: "Open Sans"
 	readonly property string secondary_family: "PT Sans"
@@ -61,4 +62,14 @@ QtObject{
 													  pixelSize: baseFontSize + 6,
 													  weight: Font.Bold
 												  })
+
+	Component.onCompleted: {
+		if(Qt.platform.os === "linux" || Qt.platform.os === "windows" || Qt.platform.os === "osx" || Qt.platform.os === "unix"){
+			baseFontSize = 20
+			iconSize = 32
+		}else{
+			baseFontSize = 36
+			iconSize = 64
+		}
+	}
 }
