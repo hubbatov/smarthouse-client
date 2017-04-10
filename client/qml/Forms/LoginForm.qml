@@ -68,13 +68,10 @@ Item{
 		}
 
 		RowLayout {
-			Item {
-				Layout.fillWidth: true
-			}
-
 			Controls.Button {
 				text: qsTr("Login")
 				enabled: __loginInput.text && __passwordInput.text
+				Layout.fillWidth: true
 
 				onClicked: {
 					tryLogin()
@@ -83,16 +80,13 @@ Item{
 
 			Controls.Button {
 				text: qsTr("Register")
+				Layout.fillWidth: true
 
 				onClicked: {
 					console.log("register request...")
 					needRegister()
 					clearFields()
 				}
-			}
-
-			Item {
-				Layout.fillWidth: true
 			}
 		}
 
